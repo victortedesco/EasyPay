@@ -2,12 +2,12 @@
 
 namespace EasyPay.Models
 {
-    public class Transaction(User sender, User receiver, decimal value) : IEntity
+    public class Transaction : IEntity
     {
         [Key] public Guid Id { get; private set; } = Guid.Empty;
-        public User Sender { get; } = sender;
-        public User Receiver { get; } = receiver;
-        public decimal Value { get; } = value;
+        public User Sender { get; private set; }
+        public User Receiver { get; private set; }
+        public decimal Value { get; private set; }
         public DateTime CreatedAt { get; private set; }
     }
 

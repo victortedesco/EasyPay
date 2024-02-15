@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyPay.Repositories;
 
-public abstract class Repository<T, R>(DataContext dataContext, DbSet<T> entities) where T : class, IEntity
+public abstract class Repository<T>(DataContext dataContext, DbSet<T> entities) where T : class, IEntity
 {
     public async Task<T?> GetById(Guid id) => await entities.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
     public async Task<List<T>> GetAll() => await entities.ToListAsync();

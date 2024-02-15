@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EasyPay.Controllers
 {
-    public abstract class Controller<T, R> : ControllerBase where T : class, IEntity where R : class, IEntity
+    public abstract class Controller<T> : ControllerBase where T : class, IEntity
     {
         private readonly Repository<T> _repository;
 
@@ -30,7 +30,7 @@ namespace EasyPay.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] R dto)
+        public async Task<IActionResult> Add([FromBody] T dto)
         {
             try
             {
