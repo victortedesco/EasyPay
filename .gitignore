@@ -1,0 +1,7 @@
+bin/
+.idea
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+EasyPay.*

@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyPay", "EasyPay.csproj", "{C73D86CA-26FF-40DD-9DC3-046B4C816ADD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C73D86CA-26FF-40DD-9DC3-046B4C816ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73D86CA-26FF-40DD-9DC3-046B4C816ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C73D86CA-26FF-40DD-9DC3-046B4C816ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73D86CA-26FF-40DD-9DC3-046B4C816ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
