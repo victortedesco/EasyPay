@@ -1,0 +1,39 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  users.api:
+    image: easypay/users/api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Services/Users/Users.API/Dockerfile
+    depends_on:
+      - sqlserver
+
+  transactions.api:
+    image: easypay/transactions/api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Services/Transactions/Transactions.API/Dockerfile
+    depends_on:
+      - sqlserver
+
+  authentication.api:
+    image: easypay/authentication/api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Services/Authentication/Authentication.API/Dockerfile
+    depends_on:
+      - sqlserver
+
+  web:
+    image: easypay/web:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+
+volumes:
+  sqlserver_data:
+  

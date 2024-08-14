@@ -46,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transactions", "Transaction
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{71E299BD-AD00-436B-ACD9-7B7F00274AE5}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,10 +96,13 @@ Global
 		{60CA0672-7AAA-455A-9503-508C674E5D3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28492F2A-FC21-4AEA-B3B6-4C763DDFA1FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28492F2A-FC21-4AEA-B3B6-4C763DDFA1FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28492F2A-FC21-4AEA-B3B6-4C763DDFA1FC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{28492F2A-FC21-4AEA-B3B6-4C763DDFA1FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28492F2A-FC21-4AEA-B3B6-4C763DDFA1FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28492F2A-FC21-4AEA-B3B6-4C763DDFA1FC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
