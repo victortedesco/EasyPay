@@ -46,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transactions", "Transaction
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{71E299BD-AD00-436B-ACD9-7B7F00274AE5}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "Docker", "Docker.dcproj", "{CCD3EBFC-3044-43B5-961F-1C876AEBBC60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

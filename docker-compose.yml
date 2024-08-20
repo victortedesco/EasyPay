@@ -1,8 +1,10 @@
+name: easypay
+
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     volumes:
-      - sqlserver_data:/var/opt/mssql
+      - sqlserver.data:/var/opt/mssql
 
   users.api:
     image: easypay/users/api:${TAG:-dev}
@@ -35,5 +37,5 @@ services:
       dockerfile: src/Web/Dockerfile
 
 volumes:
-  sqlserver_data:
+  sqlserver.data:
   
