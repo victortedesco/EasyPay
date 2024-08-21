@@ -8,6 +8,11 @@ EXPOSE 80
 EXPOSE 8080
 EXPOSE 8081
 
+USER root
+
+RUN apt-get update && apt-get install -y curl
+
+USER app
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

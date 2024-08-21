@@ -70,7 +70,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build
-        run: docker compose up -d
-
-      - name: Test
-        run: docker run --network easypay_default appropriate/curl -s --retry 10 --retry-connrefused http://localhost:4200/
+        run: docker compose up -d --wait
