@@ -1,0 +1,63 @@
+services:
+  sqlserver:
+    environment:
+      MSSQL_SA_PASSWORD: "SQLServer2022#@!"
+      ACCEPT_EULA: "Y"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "SQLServer2022#@!", "-Q", "SELECT 1" ]
+      interval: 10s
+      retries: 10
+      start_period: 15s
+      timeout: 3s
+    ports:
+      - "2433:1433"
+
+  users.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:80/health" ]
+      interval: 10s
+      retries: 10
+      start_period: 15s
+      timeout: 3s
+    ports:
+      - "5130:80"
+
+  transactions.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:80/health" ]
+      interval: 10s
+      retries: 10
+      start_period: 15s
+      timeout: 3s
+    ports:
+      - "5131:80"
+
+  authentication.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:80/health" ]
+      interval: 10s
+      retries: 10
+      start_period: 15s
+      timeout: 3s
+    ports:
+      - "5132:80"
+
+  web:
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:80/health" ]
+      interval: 10s
+      retries: 10
+      start_period: 15s
+      timeout: 3s
+    ports:
+      - "4200:80"

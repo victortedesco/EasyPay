@@ -1,0 +1,45 @@
+name: easypay
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    command: bash -c "apt-get update && apt-get install -y mssql-tools unixodbc-dev && echo \"export PATH=\\\"\\$PATH:/opt/mssql-tools/bin\\\"\" >> ~/.bashrc && exec /opt/mssql/bin/sqlservr"
+    volumes:
+      - sqlserver.data:/var/opt/mssql
+
+  users.api:
+    image: easypay/users/api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Services/Users/Users.API/Dockerfile
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  transactions.api:
+    image: easypay/transactions/api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Services/Transactions/Transactions.API/Dockerfile
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  authentication.api:
+    image: easypay/authentication/api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Services/Authentication/Authentication.API/Dockerfile
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  web:
+    image: easypay/web:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+
+volumes:
+  sqlserver.data:
