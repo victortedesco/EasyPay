@@ -2,10 +2,10 @@
 
 public class User
 {
-    public int Id { get; private set; }
-    public string Name { get; private set; }
-    public string Document { get; private set; }
-    public string Email { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public decimal Balance { get; private set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Document { get; set; }
+    public string Email { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public decimal Balance { get; set; }
 }
