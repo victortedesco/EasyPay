@@ -7,11 +7,15 @@ import { User } from "../../models/user.model";
   providedIn: "root",
 })
 export class UserService {
-  private url: string = "http://localhost:5130";
+  private url: string = "http://localhost:5130/api/users";
 
   constructor(private http: HttpClient) {}
 
-  getUser(id: string): Observable<User> {
-    return this.http.get<User>(`${this.url}/api/user/${id}`);
+  getById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.url}/id/${id}`);
+  }
+
+  getByDocument(document: string): Observable<User> {
+    return this.http.get<User>(`${this.url}/document/${document}`);
   }
 }
