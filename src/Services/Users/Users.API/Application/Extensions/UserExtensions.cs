@@ -13,7 +13,7 @@ public static class UserExtensions
 
     public static UserViewModel ToViewModel(this UserDTO userDTO)
     {
-        return new UserViewModel(userDTO.Id, userDTO.Name, userDTO.Document, userDTO.Email, userDTO.Balance);
+        return new UserViewModel(userDTO.Id, userDTO.Name, userDTO.Document, userDTO.Email, userDTO.BirthDate, userDTO.Balance);
     }
 
     public static IEnumerable<UserDTO> ToDTO(this IEnumerable<User> users)
@@ -23,6 +23,6 @@ public static class UserExtensions
 
     public static UserDTO ToDTO(this User user)
     {
-        return new UserDTO(user.Id, user.Name, user.Document, user.Email, user.Balance);
+        return new UserDTO(user.Id, user.Name, user.Document, user.Email, user.BirthDate, user.Balance);
     }
 }
