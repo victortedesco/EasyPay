@@ -6,6 +6,7 @@ public class User
     public string Name { get; set; }
     public string Document { get; set; }
     public string Email { get; set; }
+    public DateOnly BirthDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public decimal Balance { get; set; }
 }

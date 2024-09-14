@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Users.API.Application.Extensions;
 using Users.API.Controllers;
@@ -14,7 +13,7 @@ public class UserControllerTests
     public async Task GetById_ShouldReturnOkWithUser_WhenUserExists()
     {
         int id = 123456;
-        var user = new UserDTO(id, "User 1", "Document 1", "user1@easypay.com", 0m);
+        var user = new UserDTO(id, "User 1", "Document 1", "user1@easypay.com", DateOnly.MinValue, 0m);
 
         var userService = new Mock<IUserService>();
 
@@ -49,7 +48,7 @@ public class UserControllerTests
     public async Task GetByDocument_ShouldReturnOkWithUser_WhenUserExists()
     {
         string document = "123456789";
-        var user = new UserDTO(123456, "User 1", document, "user1@easypay.com", 0m);
+        var user = new UserDTO(123456, "User 1", document, "user1@easypay.com", DateOnly.MinValue, 0m);
 
         var userService = new Mock<IUserService>();
 
