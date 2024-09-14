@@ -26,6 +26,9 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(64);
 
+        builder.Property(u => u.BirthDate)
+            .IsRequired();
+
         builder.Property(u => u.CreatedAt)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("GETUTCDATE()");
@@ -35,6 +38,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .HasColumnType("decimal(18,4)");
 
         builder.HasIndex(u => u.Document)
-        .IsUnique();
+            .IsUnique();
     }
 }

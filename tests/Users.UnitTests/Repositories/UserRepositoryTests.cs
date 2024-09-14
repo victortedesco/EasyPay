@@ -15,7 +15,7 @@ public class UserRepositoryTests
 
         var users = new List<User>
         {
-            new() { Id = id, Name = "User 1", Document = "123456789", Email = "user1@easypay.com", CreatedAt = DateTime.UtcNow }
+            new() { Id = id, Name = "User 1", Document = "123456789", Email = "user1@easypay.com", BirthDate = DateOnly.MinValue, CreatedAt = DateTime.UtcNow }
         };
 
         var mockContext = new Mock<ApplicationDataContext>();
@@ -70,7 +70,7 @@ public class UserRepositoryTests
 
         var users = new List<User>
         {
-            new() { Id = 123456, Name = "User 1", Document = document, Email = "user1@easypay.com", CreatedAt = DateTime.UtcNow }
+            new() { Id = 123456, Name = "User 1", Document = document, Email = "user1@easypay.com", BirthDate = DateOnly.MinValue, CreatedAt = DateTime.UtcNow }
         };
 
         var mockContext = new Mock<ApplicationDataContext>();
