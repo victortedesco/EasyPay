@@ -1,12 +1,13 @@
-name: CI with .NET and Angular
+name: CI with .NET, Angular and Docker
 
 on:
   push:
     branches: ["main"]
   pull_request:
+    types: [review_requested, reopened, synchronize]
     branches: ["main"]
 env:
-  TEST_TAG: easypay:test
+  TAG: test
 
 jobs:
   dotnet:
@@ -29,6 +30,7 @@ jobs:
   angular:
     name: Angular Build
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
