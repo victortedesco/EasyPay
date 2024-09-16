@@ -5,7 +5,7 @@ services:
       ACCEPT_EULA: "Y"
     restart: always
     healthcheck:
-      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "SQLServer2022#@!", "-Q", "SELECT 1" ]
+      test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -No -U sa -P SQLServer2022#@! -Q \"SELECT 1\" || exit 1" ]
       interval: 10s
       retries: 10
       start_period: 15s
@@ -60,4 +60,5 @@ services:
       start_period: 15s
       timeout: 3s
     ports:
+      - "80:80"
       - "4200:80"

@@ -16,6 +16,8 @@
 **/charts
 **/docker-compose*
 **/Dockerfile*
+**/.angular
+**/dist
 **/node_modules
 **/npm-debug.log
 **/obj
