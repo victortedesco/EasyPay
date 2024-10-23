@@ -90,7 +90,7 @@ describe("UserService", () => {
     });
 
     it("should return not found when user does not exists", () => {
-        const document: string = "123456789";
+      const document: string = "123456789";
 
       service.getByDocument(document).subscribe({
         error: (error) => {
