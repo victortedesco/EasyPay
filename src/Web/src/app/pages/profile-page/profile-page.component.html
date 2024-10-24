@@ -7,7 +7,7 @@
     <app-header pageName="Início"></app-header>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 justify-evenly h-screen">
-      <div class="flex flex-col justify-around lg:justify-start">
+      <div class="flex flex-col items-center justify-around lg:justify-start">
         <div class="flex lg:hidden justify-between align-middle m-4">
           <div class="flex flex-col justify-center align-middle">
             <p class="font-semibold">Olá, {{ user?.name }}</p>
@@ -17,7 +17,7 @@
         </div>
 
         <div
-          class="flex flex-row justify-between items-start m-4 border border-black box-border rounded-xl bg-custom-2"
+          class="flex flex-row justify-between w-4/5 items-start m-4 border border-black box-border rounded-xl bg-custom-2"
         >
           <div class="flex flex-col justify-between mt-2">
             <p class="font-extrabold lg:text-2xl ml-2">Conta</p>
@@ -44,7 +44,7 @@
         </div>
 
         <div
-          class="flex lg:hidden justify-evenly items-center align-middle m-4"
+          class="flex lg:hidden justify-evenly w-4/5 items-center align-middle m-4"
         >
           <a
             class="flex flex-col items-center p-2 w-1/4 border text-sm border-black box-border rounded-xl bg-custom-1"
@@ -74,7 +74,7 @@
         </div>
 
         <div
-          class="flex flex-col justify-between items-start m-4 border border-black box-border rounded-xl bg-custom-2"
+          class="flex flex-col justify-between items-start w-4/5 m-4 border border-black box-border rounded-xl bg-custom-2"
         >
           <div class="flex p-2 w-full justify-between items-center text-center">
             <p class="font-bold lg:text-2xl">Seus Cartões</p>
@@ -100,7 +100,9 @@
             }
           </div>
         </div>
+        <img class="hidden lg:flex size-64" src="assets/anuncio.png"/>
       </div>
+      
       <div
         class="flex flex-col lg:h-fit items-start m-4 border border-black box-border rounded-xl bg-custom-2"
       >
