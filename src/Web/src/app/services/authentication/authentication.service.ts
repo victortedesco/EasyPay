@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, tap, switchMap, catchError, throwError } from "rxjs";
-import { ConfigService } from "../config.service";
 
 interface AuthResponse {
   access_token: string;
@@ -29,8 +28,7 @@ export class AuthenticationService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private jtwHelper: JwtHelperService,
-    private configService: ConfigService
+    private jtwHelper: JwtHelperService
   ) {}
 
   private getToken(
@@ -58,8 +56,7 @@ export class AuthenticationService {
   }
 
   getAdminToken(): Observable<AuthResponse> {
-    const adminPassword = this.configService.keycloakAdminPassword ?? "admin";
-    return this.getToken(this.clientId, "admin", adminPassword);
+    return this.getToken(this.clientId, "admin", "admin");
   }
 
   login(username: string, password: string): Observable<AuthResponse> {
@@ -120,8 +117,8 @@ export class AuthenticationService {
     return !!this.getAccessToken();
   }
 
-  getAccessToken(): string {
-    return localStorage.getItem("access_token") ?? "";
+  getAccessToken(): string | null {
+    return localStorage.getItem("access_token");
   }
 
   private isTokenExpired(token: string): boolean {
