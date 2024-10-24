@@ -8,11 +8,13 @@ import { CommonModule } from "@angular/common";
 import { Card } from "../../models/card.model";
 import { Transaction } from "../../models/transaction.model";
 import { CardUtils } from "../../shared/cardutils";
+import { HeaderComponent } from "../../shared/header/header.component";
+import { NavbarComponent } from "../../shared/navbar/navbar.component";
 
 @Component({
   selector: "app-profile-page",
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, HeaderComponent, NavbarComponent],
   templateUrl: "./profile-page.component.html",
   styleUrls: [],
 })
@@ -90,7 +92,10 @@ export class ProfilePageComponent implements OnInit {
 
   loadCards(): void {}
 
-  loadRecentTransactions(): void {}
+  loadRecentTransactions(): void {
+    // Depois precisamos fazer um método no back para isso, mas isso vai servir para desenvolvimento.
+    this.recentTransactions = this.recentTransactions.splice(0, 10);
+  }
 
   toggleBalanceVisibility(): void {
     this.isBalanceVisible = !this.isBalanceVisible;
