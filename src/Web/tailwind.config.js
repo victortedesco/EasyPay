@@ -12,6 +12,9 @@ module.exports = {
         'custom_2': '#a9d2cd', 
         'custom_3': '#96bfba',
         'custom_4': '#84aca7'
+      },
+      height: {
+        '512': '32rem'
       }
     },
   },
