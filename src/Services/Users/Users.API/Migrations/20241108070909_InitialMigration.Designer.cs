@@ -9,17 +9,18 @@ using Users.API.Infrastructure.Data;
 
 #nullable disable
 
-namespace Users.API.Infrastructure.Migrations
+namespace Users.API.Migrations
 {
-    [DbContext(typeof(ApplicationDataContext))]
-    [Migration("20240914003239_AddBirthDateProperty")]
-    partial class AddBirthDateProperty
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20241108070909_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("users")
                 .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -27,23 +28,13 @@ namespace Users.API.Infrastructure.Migrations
 
             modelBuilder.Entity("Users.API.Services.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("(DATEDIFF(SECOND, '1970-01-01', GETUTCDATE()))");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Balance")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,4)")
                         .HasDefaultValue(0m);
-
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Document")
                         .IsRequired()
@@ -65,7 +56,7 @@ namespace Users.API.Infrastructure.Migrations
                     b.HasIndex("Document")
                         .IsUnique();
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User", "users");
                 });
 #pragma warning restore 612, 618
         }

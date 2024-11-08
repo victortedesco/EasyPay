@@ -19,7 +19,7 @@ public class UserServiceTests
             new() { Id = id, Name = "User 1", Document = "123456789", Email = "user1@easypay.com", BirthDate = DateOnly.MinValue, CreatedAt = DateTime.UtcNow }
         };
 
-        var mockContext = new Mock<ApplicationDataContext>();
+        var mockContext = new Mock<ApplicationDbContext>();
         var usersMock = users.AsQueryable().BuildMockDbSet();
 
         usersMock.Setup(x => x.FindAsync(id)).ReturnsAsync((object[] ids) =>
@@ -45,7 +45,7 @@ public class UserServiceTests
 
         var users = new List<User>();
 
-        var mockContext = new Mock<ApplicationDataContext>();
+        var mockContext = new Mock<ApplicationDbContext>();
         var usersMock = users.AsQueryable().BuildMockDbSet();
 
         usersMock.Setup(x => x.FindAsync(id)).ReturnsAsync((object[] ids) =>
@@ -73,7 +73,7 @@ public class UserServiceTests
             new() { Id = 123456, Name = "User 1", Document = document, Email = "user1@easypay.com", BirthDate = DateOnly.MinValue, CreatedAt = DateTime.UtcNow }
         };
 
-        var mockContext = new Mock<ApplicationDataContext>();
+        var mockContext = new Mock<ApplicationDbContext>();
         var usersMock = users.AsQueryable().BuildMockDbSet();
 
         mockContext.Setup(a => a.Users).Returns(usersMock.Object);
@@ -93,7 +93,7 @@ public class UserServiceTests
 
         var users = new List<User>();
 
-        var mockContext = new Mock<ApplicationDataContext>();
+        var mockContext = new Mock<ApplicationDbContext>();
         var usersMock = users.AsQueryable().BuildMockDbSet();
 
         mockContext.Setup(a => a.Users).Returns(usersMock.Object);

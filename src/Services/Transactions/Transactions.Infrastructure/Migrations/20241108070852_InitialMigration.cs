@@ -21,8 +21,10 @@ namespace Transactions.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RecipientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,4)", nullable: false, defaultValue: 0m),
+                    RecipientName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,4)", nullable: false, defaultValue: 0m),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()")
                 },
                 constraints: table =>

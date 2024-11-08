@@ -11,8 +11,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("User");
 
         builder.Property(e => e.Id)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("(DATEDIFF(SECOND, '1970-01-01', GETUTCDATE()))");
+            .ValueGeneratedNever();
 
         builder.Property(u => u.Name)
             .IsRequired()
@@ -22,22 +21,15 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(14);
 
+        builder.HasIndex(u => u.Document)
+            .IsUnique();
+
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(64);
 
-        builder.Property(u => u.BirthDate)
-            .IsRequired();
-
-        builder.Property(u => u.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("GETUTCDATE()");
-
         builder.Property(u => u.Balance)
             .HasDefaultValue(0m)
             .HasColumnType("decimal(18,4)");
-
-        builder.HasIndex(u => u.Document)
-            .IsUnique();
     }
 }

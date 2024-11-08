@@ -16,6 +16,12 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
         return trans?.ToDTO();
     }
 
+    public async Task<IEnumerable<TransactionDTO>> GetByUserIdAsync(Guid id)
+    {
+        var transactions = await _transactionRepository.GetByUserIdAsync(id);
+        return transactions.ToDTO();
+    }
+
     public async Task<IEnumerable<TransactionDTO>> GetBySenderIdAsync(Guid id)
     {
         var trans = await _transactionRepository.GetBySenderIdAsync(id);
@@ -33,7 +39,9 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
         var model = new Transaction
         {
             SenderId = dto.SenderId,
+            SenderName = dto.SenderName,
             RecipientId = dto.RecipientId,
+            RecipientName = dto.RecipientName,
             Amount = dto.Amount
         };
 

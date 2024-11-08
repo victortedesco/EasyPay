@@ -2,11 +2,9 @@
 
 public class User
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Document { get; set; }
-    public string Email { get; set; }
-    public DateOnly BirthDate { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required string Document { get; set; }
+    public required string Email { get; set; }
     public decimal Balance { get; set; }
 }

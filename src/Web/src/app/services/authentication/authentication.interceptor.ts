@@ -1,27 +1,31 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
-import { AuthenticationService } from './authentication.service';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { AuthService } from "./authentication.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  constructor(private authService: AuthService) {}
 
-  constructor(private authenticationService: AuthenticationService) {}
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    if (this.authService.isAuthenticated()) {
+      const token = this.authService.getAccessToken();
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+      const clonedReq = req.clone({
+        headers: req.headers.set("Authorization", `Bearer ${token}`),
+      });
 
-    if (this.authenticationService.getRoles().includes('admin')) {
-      return this.authenticationService.getAdminToken().pipe(
-        switchMap(token => {
-          const clonedReq = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${token}`,
-            }
-          });
-          return next.handle(clonedReq);
-        })
-      );
+      return next.handle(clonedReq);
     }
+
     return next.handle(req);
   }
 }

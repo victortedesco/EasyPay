@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Dev Profile",
+    "Projects": [
+      {
+        "Path": "src\\Services\\Users\\Users.API\\Users.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Services\\Transactions\\Transactions.API\\Transactions.API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

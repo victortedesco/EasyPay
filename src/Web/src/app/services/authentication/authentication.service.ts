@@ -1,10 +1,11 @@
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable, tap, switchMap, catchError, throwError } from "rxjs";
+import { Observable, tap, switchMap, catchError, throwError, map } from "rxjs";
+import { User } from "../../models/user.model";
 
-interface AuthResponse {
+export interface AuthResponse {
   access_token: string;
   refresh_token: string;
   expires_in: number;
@@ -18,17 +19,16 @@ interface AuthResponse {
 @Injectable({
   providedIn: "root",
 })
-export class AuthenticationService {
+export class AuthService {
   private adminUrl =
-    "http://localhost:8070/realms/easypay/protocol/openid-connect/token";
-  private registerUrl = "http://localhost:8070/admin/realms/easypay/users";
-
+    "http://localhost:8060/realms/easypay/protocol/openid-connect/token";
+  private registerUrl = "http://localhost:8060/admin/realms/easypay/users";
   private clientId = "account";
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private jtwHelper: JwtHelperService
+    private jwtHelper: JwtHelperService
   ) {}
 
   private getToken(
@@ -36,6 +36,12 @@ export class AuthenticationService {
     username: string,
     password: string
   ): Observable<AuthResponse> {
+    if (!client_id || !username || !password) {
+      return throwError(
+        () => new Error("Todos os parâmetros são obrigatórios.")
+      );
+    }
+
     const body = new URLSearchParams();
     body.set("client_id", client_id);
     body.set("grant_type", "password");
@@ -49,39 +55,119 @@ export class AuthenticationService {
     return this.http
       .post<AuthResponse>(this.adminUrl, body.toString(), { headers })
       .pipe(
-        tap((response: AuthResponse) => {
-          this.storeTokens(response);
+        catchError((error) => {
+          if (error.status === 400) {
+            return throwError(
+              () =>
+                new Error(
+                  "Credenciais inválidas. Verifique seu nome de usuário e senha."
+                )
+            );
+          } else if (error.status === 401) {
+            return throwError(
+              () =>
+                new Error(
+                  "Não autorizado. Verifique suas credenciais de cliente."
+                )
+            );
+          } else {
+            return throwError(
+              () =>
+                new Error(
+                  "Ocorreu um erro ao tentar obter o token. Tente novamente mais tarde."
+                )
+            );
+          }
         })
       );
   }
 
   getAdminToken(): Observable<AuthResponse> {
-    return this.getToken(this.clientId, "admin", "admin");
+    return this.getToken(this.clientId, "admin", "admin").pipe(
+      tap((response) => {
+        const token = response.access_token;
+        console.log(token);
+      })
+    );
   }
 
   login(username: string, password: string): Observable<AuthResponse> {
-    return this.getToken(this.clientId, username, password);
+    if (!username || !password) {
+      return throwError(
+        () => new Error("Nome de usuário e senha são obrigatórios.")
+      );
+    }
+
+    return this.getToken(this.clientId, username, password).pipe(
+      tap((response: AuthResponse) => {
+        this.storeTokens(response);
+      }),
+      catchError((error) => {
+        if (error.status === 400) {
+          return throwError(
+            () =>
+              new Error(
+                "Credenciais inválidas. Verifique seu nome de usuário e senha."
+              )
+          );
+        } else if (error.status === 401) {
+          return throwError(
+            () =>
+              new Error(
+                "Não autorizado. Verifique suas credenciais de cliente."
+              )
+          );
+        } else {
+          return throwError(
+            () =>
+              new Error(
+                "Ocorreu um erro ao tentar fazer login. Tente novamente mais tarde."
+              )
+          );
+        }
+      })
+    );
   }
 
   signin(
-    fullName: string,
     username: string,
+    fullname: string,
     password: string,
     email: string,
-    document: string
+    phoneNumber: string,
+    document: string,
+    birthdate: string
   ): Observable<any> {
+    if (
+      !fullname ||
+      !password ||
+      !email ||
+      !document ||
+      !username ||
+      !birthdate
+    ) {
+      return throwError(() => new Error("Todos os campos são obrigatórios."));
+    }
+
     return this.getAdminToken().pipe(
       switchMap((response: AuthResponse) => {
         const token = response.access_token;
 
+        if (!token) {
+          return throwError(
+            () => new Error("Falha ao obter o token de administrador.")
+          );
+        }
+
         const body = {
-          firstName: fullName.split(" ")[0],
-          lastName: fullName.split(" ").slice(1).join(" "),
           username: username,
+          fullname: fullname,
           enabled: true,
           emailVerified: true,
           email: email,
+          phoneNumber: phoneNumber,
           document: document,
+          birthdate: birthdate,
           credentials: [
             {
               type: "password",
@@ -89,6 +175,7 @@ export class AuthenticationService {
               temporary: false,
             },
           ],
+          groups: [],
         };
 
         const headers = new HttpHeaders({
@@ -97,6 +184,24 @@ export class AuthenticationService {
         });
 
         return this.http.post(this.registerUrl, body, { headers });
+      }),
+      catchError((error) => {
+        if (error.status === 401) {
+          return throwError(
+            () => new Error("Não autorizado. Verifique suas credenciais.")
+          );
+        } else if (error.status === 409) {
+          return throwError(
+            () => new Error("Nome de usuário ou email já em uso.")
+          );
+        } else {
+          return throwError(
+            () =>
+              new Error(
+                "Erro ao registrar usuário. Tente novamente mais tarde."
+              )
+          );
+        }
       })
     );
   }
@@ -109,27 +214,54 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    localStorage.clear();
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("expires_in");
+    localStorage.removeItem("token_type");
     this.router.navigate(["/login"]);
   }
 
   isAuthenticated(): boolean {
-    return !!this.getAccessToken();
+    return this.getAccessToken() !== "";
   }
 
-  getAccessToken(): string | null {
-    return localStorage.getItem("access_token");
+  getAccessToken(): string {
+    return localStorage.getItem("access_token") ?? "";
+  }
+
+  getRefreshToken(): string {
+    return localStorage.getItem("refresh_token") ?? "";
+  }
+
+  convertTokenToUser(): User | undefined {
+    const token = this.getAccessToken();
+    
+    if (!token) {
+      return undefined;
+    }
+
+    const decodedToken = this.jwtHelper.decodeToken(token);
+
+    const user: User = {
+      id: decodedToken.sub,
+      name: decodedToken.fullname,
+      email: decodedToken.email,
+      document: decodedToken.document,
+    };
+
+    return user;
   }
 
   private isTokenExpired(token: string): boolean {
-    return this.jtwHelper.isTokenExpired(token);
+    return this.jwtHelper.isTokenExpired(token);
   }
 
   private refreshToken(): Observable<AuthResponse> {
-    const accessToken = this.getAccessToken() ?? "";
+    const accessToken = this.getAccessToken();
 
     if (this.isTokenExpired(accessToken)) {
-      const refreshToken = localStorage.getItem("refresh_token") ?? "";
+      const refreshToken = this.getRefreshToken();
+
       if (!refreshToken) {
         this.logout();
       }
@@ -174,7 +306,7 @@ export class AuthenticationService {
   getRoles(): string[] {
     if (this.isAuthenticated()) {
       const token = this.getAccessToken();
-      const decodedToken = this.jtwHelper.decodeToken(token);
+      const decodedToken = this.jwtHelper.decodeToken(token);
       const roles = decodedToken?.realm_access?.roles;
 
       return roles;
@@ -191,5 +323,42 @@ export class AuthenticationService {
       return "/profile";
     }
     return "";
+  }
+
+  checkAdminRole(): boolean {
+    return this.getRoles().includes("admin");
+  }
+
+  recoverPassword(userId: string): Observable<any> {
+    return this.getAdminToken().pipe(
+      switchMap((response: AuthResponse) => {
+        const token = response.access_token;
+        const headers = new HttpHeaders({
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        });
+
+        const params = new HttpParams()
+          .set("client_id", this.clientId)
+          .set("redirect_uri", "http://localhost:4200/login");
+
+        return this.http
+          .put(
+            `http://localhost:8070/admin/realms/eshop/users/${userId}/reset-password-email`,
+            {},
+            { headers, params }
+          )
+          .pipe(
+            catchError((error) => {
+              console.error("Error trying to send verification email:", error);
+              return throwError(() => error);
+            })
+          );
+      }),
+      catchError((error) => {
+        console.error("Error fetching admin token:", error);
+        return throwError(() => error);
+      })
+    );
   }
 }

@@ -43,7 +43,7 @@ services:
     command:
       - "start-dev"
       - "--import-realm"
-      - "--http-port=8070"
+      - "--http-port=8060"
     environment:
       - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm-export.json
       - KEYCLOAK_ADMIN=admin
@@ -59,7 +59,7 @@ services:
       timeout: 10s
       retries: 3
     ports:
-      - 8070:8070
+      - 8060:8060
 
   web:
     healthcheck:

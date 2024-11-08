@@ -12,7 +12,7 @@ using Transactions.Infrastructure.Data;
 namespace Transactions.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241108021624_InitialMigration")]
+    [Migration("20241108070852_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -45,8 +45,18 @@ namespace Transactions.Infrastructure.Migrations
                     b.Property<Guid>("RecipientId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("RecipientName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SenderName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 

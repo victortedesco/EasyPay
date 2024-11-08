@@ -12,6 +12,6 @@ public static class TransactionExtensions
 
     public static TransactionViewModel ToViewModel(this TransactionDTO transaction)
     {
-        return new TransactionViewModel(transaction.Id, transaction.SenderId, transaction.RecipientId, transaction.Amount, transaction.Date);
+        return new TransactionViewModel(transaction.Id, transaction.SenderId, transaction.SenderName, transaction.RecipientId, transaction.RecipientName, transaction.Amount, transaction.Date);
     }
 }

@@ -1,12 +1,29 @@
 ﻿using EasyPay.Library.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Users.API.Infrastructure.Data;
+using Users.API.Services;
 
-namespace Transactions.API.Application.Extensions;
+namespace Users.API.Application.Extensions;
 
 public static class DependencyInjection
 {
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseSqlServer(connectionString, x => x.MigrationsHistoryTable("__UsersMigrationHistory", "users"));
+        });
+        var dbContext = services.BuildServiceProvider().GetService<ApplicationDbContext>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
+
+        return services;
+    }
+
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers().ConfigureApiBehaviorOptions(options =>

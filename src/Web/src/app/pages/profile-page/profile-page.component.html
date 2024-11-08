@@ -15,7 +15,7 @@
       <div class="flex items-center ml-2">
         <p>
           R$ @if (isBalanceVisible) {
-          {{ user?.balance }}
+          {{ balance.toFixed(2) }}
           } @else { ****.** }
         </p>
         <button class="flex ml-1" (click)="toggleBalanceVisibility()">
