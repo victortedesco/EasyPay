@@ -34,7 +34,7 @@ module.exports = function (config) {
       ]
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['Edge', "ChormeHeadless"],
+    browsers: ['Edge', "ChromeHeadless"],
     restartOnFileChange: false
   });
 };
