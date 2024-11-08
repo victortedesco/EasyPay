@@ -9,6 +9,13 @@
   box-sizing: border-box;
 }
 
+@layer components {
+   .custom-bg {
+     @apply 
+     bg-custom-bg; /* Aplicando cor de fundo personalizada */
+     }
+    }
+
 html,
 body {
   height: 100vh;
