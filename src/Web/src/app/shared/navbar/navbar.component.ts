@@ -1,6 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { User } from "../../models/user.model";
 import { DateUtils } from "../dateutils";
+import { UserService } from "../../services/user/user.service";
+import { AuthService } from "../../services/authentication/authentication.service";
 
 @Component({
   selector: "app-navbar",
@@ -9,13 +11,13 @@ import { DateUtils } from "../dateutils";
   templateUrl: "./navbar.component.html",
   styleUrls: [],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   dateUtils: DateUtils = new DateUtils();
-  public user?: User = {
-    id: 1234,
-    document: "123.456.789-10",
-    name: "Victor Augusto Tedesco",
-    email: "victor.a.tedesco@gmail.com",
-    balance: 150001.33,
-  };
+  public user?: User;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.user = this.authService.convertTokenToUser();
+  }
 }

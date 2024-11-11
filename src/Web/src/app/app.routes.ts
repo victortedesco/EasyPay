@@ -10,7 +10,7 @@ import { ReceiptPageComponent } from "./pages/receipt-page/receipt-page.componen
 
 export const routes: Routes = [
   { path: "", component: HomePageComponent },
-  { path: "profile", component: ProfilePageComponent, canActivate: [AuthGuard] },
+  { path: "profile", component: ProfilePageComponent },
   { path: "login", component: LoginPageComponent },
   { path: "register", component: RegisterPageComponent},
   { path: "statment", component: StatmentPageComponent, canActivate: [AuthGuard] },

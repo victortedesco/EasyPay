@@ -11,11 +11,13 @@ import { CardUtils } from "../../shared/cardutils";
 import { TransactionService } from "../../services/transaction/transaction.service";
 import { AuthService } from "../../services/authentication/authentication.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { HeaderComponent } from "../../shared/header/header.component";
+import { NavbarComponent } from "../../shared/navbar/navbar.component";
 
 @Component({
   selector: "app-profile-page",
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, HeaderComponent, NavbarComponent],
   templateUrl: "./profile-page.component.html",
   styleUrls: [],
 })
