@@ -124,23 +124,16 @@
         <p class="text-red-500">As senhas não coincidem</p>
       </div>
 
-      <div class="p-2 flex flex-row justify-items-start">
-        <div class="p-3">
-          <button
-            (click)="goToLogin()"
-            class="bg-custom_1 w-28 h-9 text-2xl rounded-md border border-black shadow-lg shadow-black/25"
-          >
-            Login
-          </button>
-        </div>
-        <div class="p-3">
-          <button
-            class="bg-custom_1 w-28 h-9 text-2xl rounded-md border border-black shadow-lg shadow-black/25"
-            (click)="performRegistration()"
-          >
-            Cadastrar
-          </button>
-        </div>
+      <div class="p-4 gap-2 flex flex-col items-center">
+        <a class="text-sm" href="/login"
+          >Clique aqui para ir para a página de login</a
+        >
+        <button
+          class="bg-custom_1 w-28 h-9 text-2xl rounded-md border border-black shadow-lg shadow-black/25"
+          (click)="performRegistration()"
+        >
+          Entrar
+        </button>
       </div>
     </form>
   </div>

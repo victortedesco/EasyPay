@@ -16,10 +16,6 @@ export class LoginPageComponent {
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  goToRegister() {
-    this.router.navigate(["/register"]);
-  }
-
   performLogin() {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {

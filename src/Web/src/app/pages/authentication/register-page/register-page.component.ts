@@ -68,10 +68,6 @@ export class RegisterPageComponent {
     }
   }
 
-  goToLogin() {
-    this.router.navigate(["/login"]);
-  }
-
   onPasswordFocus(show: any) {
     this.showRequirements = show;
   }

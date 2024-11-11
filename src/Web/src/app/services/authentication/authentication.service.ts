@@ -86,7 +86,6 @@ export class AuthService {
     return this.getToken(this.clientId, "admin", "admin").pipe(
       tap((response) => {
         const token = response.access_token;
-        console.log(token);
       })
     );
   }
@@ -186,6 +185,7 @@ export class AuthService {
         return this.http.post(this.registerUrl, body, { headers });
       }),
       catchError((error) => {
+        console.log(error);
         if (error.status === 401) {
           return throwError(
             () => new Error("Não autorizado. Verifique suas credenciais.")

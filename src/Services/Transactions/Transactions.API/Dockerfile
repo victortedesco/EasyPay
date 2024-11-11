@@ -18,6 +18,7 @@ USER app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["src/Services/Library/EasyPay.Library.csproj", "src/Services/Library/EasyPay.Library.csproj"]
 COPY ["src/Services/Transactions/Transactions.API/Transactions.API.csproj", "src/Services/Transactions/Transactions.API/"]
 COPY ["src/Services/Transactions/Transactions.Domain/Transactions.Domain.csproj", "src/Services/Transactions/Transactions.Domain/"]
 COPY ["src/Services/Transactions/Transactions.Infrastructure/Transactions.Infrastructure.csproj", "src/Services/Transactions/Transactions.Infrastructure/"]
