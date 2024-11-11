@@ -18,6 +18,7 @@ USER app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["src/Services/Library/EasyPay.Library.csproj", "src/Services/Library/EasyPay.Library.csproj"]
 COPY ["src/Services/Users/Users.API/Users.API.csproj", "src/Services/Users/Users.API/"]
 RUN dotnet restore "./src/Services/Users/Users.API/Users.API.csproj"
 COPY . .

@@ -25,9 +25,12 @@
                 "glob": "**/*",
                 "input": "src/assets/",
                 "output": "assets/"
+                "input": "src/assets/",
+                "output": "assets/"
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/custom-theme.scss",
               "src/styles.css"
             ],
@@ -85,11 +88,15 @@
                 "glob": "**/*",
                 "input": "src/assets/",
                 "output": "assets/"
+                "input": "src/assets/",
+                "output": "assets/"
               }
             ],
             "styles": [
               "src/styles.css"
             ],
+            "scripts": [],
+            "karmaConfig": "karma.conf.js"
             "scripts": [],
             "karmaConfig": "karma.conf.js"
           }

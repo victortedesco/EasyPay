@@ -1,0 +1,46 @@
+<div class="flex items-center justify-center overflow-hidden">
+  <div class="flex flex-col items-center justify-center">
+    <img class="p-4 size-56" src="assets/logo.png" />
+    <form
+      class="bg-custom_3 w-72 h-96 rounded-md flex flex-col items-center p-4 border border-black shadow-lg shadow-black/25"
+    >
+      <h3 class="text-4xl">Login</h3>
+      <div class="w-full mb-4">
+        <h3 class="text-2xl">Nome de Usuário</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          type="text"
+          id="username"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Digite seu Nome de Usuário"
+          required
+        />
+      </div>
+      <div class="w-full mb-4">
+        <h3 class="text-2xl">Senha</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Digite a sua Senha"
+          required
+        />
+        <a href="#" class="p-2">Esqueceu a senha?</a>
+      </div>
+      <div class="p-4 gap-2 flex flex-col items-center">
+        <a class="text-sm" href="/register"
+          >Clique aqui para ir para a página de cadastro</a
+        >
+        <button
+          class="bg-custom_1 w-28 h-9 text-2xl rounded-md border border-black shadow-lg shadow-black/25"
+          (click)="performLogin()"
+        >
+          Entrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
