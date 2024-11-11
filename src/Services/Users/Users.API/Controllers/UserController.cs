@@ -1,4 +1,4 @@
-﻿using EasyPay.Library.Services;
+using EasyPay.Library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Users.API.Application.Extensions;
