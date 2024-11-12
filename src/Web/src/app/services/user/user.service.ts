@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "../../models/user.model";
+import { AddUserRequest } from "../../models/request/add.user.request";
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +13,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.url}/id/${id}`);
+    return this.http.get<User>(`${this.url}/${id}`);
   }
 
   getByDocument(document: string): Observable<User> {
@@ -27,7 +28,7 @@ export class UserService {
     return this.http.put<void>(`${this.url}/balance/${userId}`, value);
   }
 
-  addUser(user: User): Observable<User> {
+  addUser(user: AddUserRequest): Observable<User> {
     return this.http.post<User>(`${this.url}`, user);
   }
 }

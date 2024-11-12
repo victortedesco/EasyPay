@@ -82,22 +82,19 @@
           </div>
           <div class="flex flex-col w-full text-bg-color">
             @for (card of cards; track card.id) {
-            <div
-              class="flex flex-row m-4 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900"
-            >
-              <div class="flex flex-col">
-                <p class="ml-1 mt-1">{{ card.userName }}</p>
-                <p class="ml-1 text-xs">
-                  {{ cardUtils.getCensoredNumber(card) }}
-                </p>
-                <p class="ml-1 mt-2">{{ card.color }} | {{ card.cardFlag }}</p>
+              <div
+                class="flex flex-row m-4 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900"
+              >
+                <div class="flex flex-col">
+                  <a (click)="viewCard(card.id)" class="ml-1 mt-1">{{ card.userName }}</a>
+                  <p class="ml-1 text-xs">
+                    {{ cardUtils.getCensoredNumber(card) }}
+                  </p>
+                  <p class="ml-1 mt-2">{{ card.color }} | {{ card.cardFlag }}</p>
+                </div>
+                <img class="mr-2 size-16" src="{{ cardUtils.getCardIcon(card) }}" />
               </div>
-              <img
-                class="mr-2 size-16"
-                src="assets/icons/cards/mastercard.svg"
-              />
-            </div>
-            }
+              }
           </div>
         </div>
       </div>

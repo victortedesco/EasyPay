@@ -56,6 +56,7 @@ export class CardsPageComponent implements OnInit {
     this.cardService.getByUserId(this.user.id).subscribe({
       next: (response) => {
         if (!response) return;
+        console.log(response);
         this.cards = response;
       },
       error: (error: HttpErrorResponse) => {
@@ -64,7 +65,7 @@ export class CardsPageComponent implements OnInit {
     });
   }
 
-  viewCard(id: string): void {
-    this.router.navigate(["/card", id]);
+  viewCard(cardId: number): void {
+    this.router.navigate(["/card", { id: cardId }]);
   }
 }

@@ -49,22 +49,25 @@ export class RegisterPageComponent {
 
   performRegistration() {
     if (this.passwordForm.valid) {
-      this.authService.signin(
-        this.fullname.trim().replaceAll(" ", "").toLowerCase(),
-        this.fullname.trim(),
-        this.passwordForm.get("password")?.value,
-        this.email,
-        this.phoneNumber,
-        this.document,
-        new Date(this.birthDate).toISOString(),
-      ).subscribe({
-        next: () => {
-          this.router.navigate(["/login"]);
-        },
-        error: (error: any) => {
-          console.log("Erro ao registrar usuário", error);
-        },
-      });
+      console.log("Registrando usuário...");
+      this.authService
+        .signin(
+          this.fullname.trim().replaceAll(" ", "").toLowerCase(),
+          this.fullname.trim(),
+          this.passwordForm.get("password")?.value,
+          this.email,
+          this.phoneNumber,
+          this.document,
+          new Date(this.birthDate).toISOString().split("T")[0]
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(["/login"]);
+          },
+          error: (error) => {
+            console.log("Erro ao registrar usuário", error);
+          },
+        });
     }
   }
 

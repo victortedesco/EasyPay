@@ -5,8 +5,8 @@ import {
   HttpRequest,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { AuthService } from "./authentication.service";
+import { Observable, switchMap } from "rxjs";
+import { AuthResponse, AuthService } from "./authentication.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -18,6 +18,20 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     if (this.authService.isAuthenticated()) {
       const token = this.authService.getAccessToken();
+
+      if (this.authService.isTokenExpired(token)) {
+        return this.authService.refreshToken().pipe(
+          switchMap((newAccessToken: AuthResponse) => {
+            const clonedReq = req.clone({
+              headers: req.headers.set(
+                "Authorization",
+                `Bearer ${newAccessToken}`
+              ),
+            });
+            return next.handle(clonedReq);
+          })
+        );
+      }
 
       const clonedReq = req.clone({
         headers: req.headers.set("Authorization", `Bearer ${token}`),

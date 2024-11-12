@@ -13,6 +13,8 @@ import { AuthService } from "../../services/authentication/authentication.servic
 import { HttpErrorResponse } from "@angular/common/http";
 import { HeaderComponent } from "../../shared/header/header.component";
 import { NavbarComponent } from "../../shared/navbar/navbar.component";
+import { CardService } from "../../services/card/card.service";
+import { AddUserRequest } from "../../models/request/add.user.request";
 
 @Component({
   selector: "app-profile-page",
@@ -41,6 +43,7 @@ export class ProfilePageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
+    private cardService: CardService,
     private transactionService: TransactionService,
     private userService: UserService
   ) {}
@@ -48,6 +51,7 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.loadUser();
+      if (!this.userId) return;
       this.loadBalance();
       this.loadCards();
       this.loadRecentTransactions();
@@ -69,9 +73,15 @@ export class ProfilePageComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 404) {
-          this.userService.addUser(this.user!).subscribe({
+          const addUser: AddUserRequest = {
+            name: this.user!.fullname,
+            email: this.user!.email,
+            document: this.user!.document,
+          };
+
+          this.userService.addUser(addUser).subscribe({
             error: () => {
-              this.router.navigate([""]);
+              this.router.navigate(["/login"]);
             },
           });
         }
@@ -79,7 +89,15 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  loadCards(): void {}
+  loadCards(): void {
+    if (!this.userId) return;
+
+    this.cardService.getByUserId(this.userId).subscribe({
+      next: (cards) => {
+        this.cards = cards;
+      },
+    });
+  }
 
   loadRecentTransactions(): void {
     if (!this.userId) return;
@@ -98,6 +116,10 @@ export class ProfilePageComponent implements OnInit {
   }
 
   viewTransaction(transaction: Transaction): void {
-    this.router.navigate(["transaction", { id: transaction.id }]);
+    this.router.navigate(["receipt", { id: transaction.id }]);
+  }
+
+  viewCard(cardId: number): void {
+    this.router.navigate(["/card", { id: cardId }]);
   }
 }

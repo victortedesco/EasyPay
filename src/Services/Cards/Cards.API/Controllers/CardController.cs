@@ -1,6 +1,7 @@
 ﻿using Cards.API.Application.Extensions;
 using Cards.API.Application.ViewModels;
 using Cards.API.Services;
+using Cards.API.Services.DTOs;
 using EasyPay.Library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ public class CardController(IKeyCloakService keyCloakService, ICardService cardS
     private readonly IKeyCloakService _keyCloakService = keyCloakService;
     private readonly ICardService _cardService = cardService;
 
-    [HttpGet("id/{id:int}")]
+    [HttpGet("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -108,5 +109,67 @@ public class CardController(IKeyCloakService keyCloakService, ICardService cardS
             return BadRequest();
 
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.ToViewModel());
+    }
+
+    [HttpPut("{id:int}")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Update(int id, [FromBody] CardViewModel request)
+    {
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
+
+        if (userId is null)
+            return Unauthorized();
+
+        var card = await _cardService.GetByIdAsync(id);
+
+        if (card is null)
+            return NotFound();
+
+        if (!userRoles.Contains("admin") && card.UserId != userId)
+            return Forbid();
+
+        var dto = new CardDTO(id, card.UserId, card.UserName, "", "", default, request.CardLimit, request.TotalExpenses);
+        var result = await _cardService.UpdateAsync(id, dto);
+
+        if (!result)
+            return BadRequest();
+
+        return Ok();
+    }
+
+    [HttpDelete("{id:int}")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
+
+        if (userId is null)
+            return Unauthorized();
+
+        var card = await _cardService.GetByIdAsync(id);
+
+        if (card is null)
+            return NotFound();
+
+        if (!userRoles.Contains("admin") && card.UserId != userId)
+            return Forbid();
+
+        var result = await _cardService.DeleteAsync(id);
+
+        if (!result)
+            return NotFound();
+
+        return Ok();
     }
 }

@@ -98,28 +98,41 @@ export class TransactionPageComponent implements OnInit {
       next: (balance) => {
         this.userBalance = balance;
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 404) {
-          this.userService.addUser(this.user!).subscribe({
-            error: () => {
-              this.router.navigate([""]);
-            },
-          });
-        }
+    });
+  }
+
+  addToBalance(user: User, value: number): void {
+    if (user.id === this.selectedRecipient?.id) return;
+    this.userService.setBalance(user.id, value).subscribe({
+      next: () => {
+        this.loadBalance();
       },
     });
   }
 
   confirmTransfer(): void {
-    if (this.transferAmount > this.userBalance) {
+    if (!this.selectedRecipient || !this.transferAmount) return;
+    if (this.transferAmount > this.userBalance - 200) {
       return;
     }
 
-    const transferData = {
-      recipient: this.selectedRecipient,
-      amount: this.transferAmount,
+    const transaction: Transaction = {
+      id: "",
+      senderId: this.user?.id!,
+      senderName: this.user?.fullname!,
+      receiverId: this.selectedRecipient?.id!,
+      receiverName: this.selectedRecipient?.fullname!,
+      value: this.transferAmount,
+      date: new Date(),
     };
 
-    alert("Transação Concluida com Sucesso");
+    this.transactionService.addTransaction(transaction).subscribe({
+      next: (response) => {
+        this.loadBalance();
+        this.addToBalance(this.user!, this.transferAmount * -1);
+        this.addToBalance(this.selectedRecipient!, this.transferAmount);
+        this.recentTransactions.unshift(response);
+      },
+    });
   }
 }

@@ -12,13 +12,13 @@ import { CardsPageComponent } from "./pages/cards-page/cards-page.component";
 
 export const routes: Routes = [
   { path: "", component: HomePageComponent },
-  { path: "profile", component: ProfilePageComponent },
+  { path: "profile", component: ProfilePageComponent, canActivate: [AuthGuard] },
   { path: "login", component: LoginPageComponent },
   { path: "register", component: RegisterPageComponent },
-  { path: "statement", component: StatementPageComponent },
-  { path: "send", component: TransactionPageComponent },
-  { path: "receipt", component: ReceiptPageComponent },
-  { path: "card", component: CardPageComponent },
-  { path: "cards", component: CardsPageComponent },
+  { path: "statement", component: StatementPageComponent, canActivate: [AuthGuard] },
+  { path: "send", component: TransactionPageComponent, canActivate: [AuthGuard] },
+  { path: "receipt", component: ReceiptPageComponent, canActivate: [AuthGuard] },
+  { path: "card", component: CardPageComponent, canActivate: [AuthGuard] },
+  { path: "cards", component: CardsPageComponent, canActivate: [AuthGuard] },
   { path: "**", redirectTo: "" },
 ];

@@ -1,14 +1,10 @@
-import { DateUtils } from "../../shared/dateutils";
 import { MatIconModule } from "@angular/material/icon";
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { User } from "../../models/user.model";
-import { UserService } from "../../services/user/user.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { Card } from "../../models/card.model";
-import { Transaction } from "../../models/transaction.model";
 import { CardUtils } from "../../shared/cardutils";
-import { TransactionService } from "../../services/transaction/transaction.service";
 import { AuthService } from "../../services/authentication/authentication.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { HeaderComponent } from "../../shared/header/header.component";
@@ -53,7 +49,7 @@ export class CardPageComponent {
     this.user = this.authService.convertTokenToUser();
   }
 
-  loadCard(id: string): void {
+  loadCard(id: number): void {
     this.cardService.getById(id).subscribe({
       next: (response) => {
         if (!response) return;
@@ -62,6 +58,19 @@ export class CardPageComponent {
       error: (error: HttpErrorResponse) => {
         console.error(error);
         this.router.navigate(["/cards"]);
+      },
+    });
+  }
+
+  deleteCard(): void {
+    if (!this.card) return;
+
+    this.cardService.deleteCard(this.card.id).subscribe({
+      next: () => {
+        this.router.navigate(["/cards"]);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error(error);
       },
     });
   }

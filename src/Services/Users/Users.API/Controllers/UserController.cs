@@ -12,13 +12,12 @@ namespace Users.API.Controllers;
 [Route("api/users")]
 [Authorize]
 [ApiController]
-public class UserController(ILogger<UserController> logger, IKeyCloakService keyCloakService, IUserService userService) : ControllerBase
+public class UserController(IKeyCloakService keyCloakService, IUserService userService) : ControllerBase
 {
-    private readonly ILogger<UserController> _logger = logger;
     private readonly IKeyCloakService _keyCloakService = keyCloakService;
     private readonly IUserService _userService = userService;
 
-    [HttpGet("id/{id:guid}")]
+    [HttpGet("{id:guid}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]

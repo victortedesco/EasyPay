@@ -20,13 +20,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 _ = Task.Run(() => ExecuteMigrationsPeriodically(app));
 

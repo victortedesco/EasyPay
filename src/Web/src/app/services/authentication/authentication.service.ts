@@ -254,11 +254,11 @@ export class AuthService {
     return user;
   }
 
-  private isTokenExpired(token: string): boolean {
+  isTokenExpired(token: string): boolean {
     return this.jwtHelper.isTokenExpired(token);
   }
 
-  private refreshToken(): Observable<AuthResponse> {
+  refreshToken(): Observable<AuthResponse> {
     const accessToken = this.getAccessToken();
 
     if (this.isTokenExpired(accessToken)) {

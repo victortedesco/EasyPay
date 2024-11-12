@@ -7,10 +7,10 @@
       <app-header pageName="Informações do Cartão"></app-header>
   
       <div class="flex lg:hidden p-2 w-full justify-between">
-        <a class="text-2xl font-bold" href="/profile">
+        <a class="text-2xl font-bold" href="/cards">
           <mat-icon class="align-middle" aria-hidden="" aria-label="Back">arrow_back</mat-icon>
         </a>
-        <p class="text-2xl font-bold mr-6">Cartões</p>
+        <p class="text-2xl font-bold mr-6">Cartão</p>
         <div></div>
       </div>
       <div class="p-10 lg:flex hidden flex-col w-full lg:w-2/5 text-bg-color">
@@ -26,7 +26,7 @@
           </div>
           <img
             class="mr-2 size-16"
-            src="assets/icons/cards/mastercard.svg"
+            src="{{ cardUtils.getCardIcon(card) }}"
           />
         </div>
       </div>
@@ -44,19 +44,19 @@
               </div>
               <img
                 class="mr-2 size-16"
-                src="assets/icons/cards/mastercard.svg"
+                src="{{ cardUtils.getCardIcon(card) }}"
               />
             </div>
           </div> 
                 <div class="flex flex-col justify-between p-4">
-                    <h2 class="flex flex-raw text-lg font-bold mb-4">Status: Block - Crédito/Débito</h2>
+                    <h2 class="flex flex-raw text-lg font-bold mb-4">Crédito/Débito</h2>
                     <div class ="flex flex-col">
                         <p class="font-bold">CVV</p>
-                        <p>123</p>
+                        <p>{{ card?.securityNumber }}</p>
                     </div>
                     <div>
                         <p class="font-bold">Validade</p>
-                        <p>10/23</p>
+                        <p>{{ cardUtils.getExpirationDate(card) }}</p>
                     </div>
                 </div>
         
@@ -65,7 +65,7 @@
                     <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Alt. Limite</button>
                     <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Opções</button>
                     <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Bloquear</button>
-                    <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Deletar</button>
+                    <button (click)="deleteCard()" class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Deletar</button>
                 </div>
       </div>
     </div>

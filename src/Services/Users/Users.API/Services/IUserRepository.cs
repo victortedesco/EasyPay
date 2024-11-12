@@ -47,7 +47,7 @@ public class UserRepository(ApplicationDbContext dataContext) : IUserRepository
         if (user is null)
             return false;
 
-        user.Balance = balance;
+        user.Balance += balance;
         await dataContext.SaveChangesAsync();
 
         return true;

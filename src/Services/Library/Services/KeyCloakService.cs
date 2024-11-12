@@ -11,15 +11,14 @@ public class KeyCloakService(IHttpContextAccessor contextAccessor) : IKeyCloakSe
 
     public Guid? GetUserId()
     {
-        try
+        var sub = _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+        if (Guid.TryParse(sub, out var userId))
         {
-            var sub = _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            return Guid.Parse(sub);
+            return userId;
         }
-        catch (Exception)
-        {
-            return null;
-        }
+
+        return null;
     }
 
     public string GetUserName()

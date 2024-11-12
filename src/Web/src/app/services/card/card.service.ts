@@ -7,16 +7,16 @@ import { Card } from "../../models/card.model";
   providedIn: "root",
 })
 export class CardService {
-  private url: string = "http://localhost:5130/api/cards";
+  private url: string = "http://localhost:5126/api/cards";
 
   constructor(private http: HttpClient) {}
 
-  getById(id: string): Observable<Card> {
+  getById(id: number): Observable<Card> {
     return this.http.get<Card>(`${this.url}/${id}`);
   }
 
   getByUserId(userId: string): Observable<Card[]> {
-    return this.http.get<Card[]>(`${this.url}/user/${userId}`);
+    return this.http.get<Card[]>(`${this.url}/userId/${userId}`);
   }
 
   addCard(): Observable<Card> {
@@ -24,10 +24,10 @@ export class CardService {
   }
 
   updateCard(card: Card): Observable<void> {
-    return this.http.put<void>(`${this.url}`, card);
+    return this.http.put<void>(`${this.url}/${card.id}`, card);
   }
 
-  deleteCard(id: string): Observable<void> {
+  deleteCard(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
 }

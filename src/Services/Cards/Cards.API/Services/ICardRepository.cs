@@ -66,6 +66,9 @@ public class CardRepository(ApplicationDbContext dataContext) : ICardRepository
             return false;
         }
 
+        card.IsDeleted = true;
+        _cards.Update(card);
+
         return await dataContext.SaveChangesAsync() > 0;
     }
 }

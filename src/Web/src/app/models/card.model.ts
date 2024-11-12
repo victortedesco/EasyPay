@@ -1,10 +1,10 @@
 export interface Card {
   id: number;
-  number: number,
+  cardNumber: number,
   userId: number,
   userName: string,
-  securityCode: number,
-  expireDate: Date,
+  securityNumber: number,
+  expireDate: string,
   cardLimit: number,
   totalExpenses: number,
   color: string,

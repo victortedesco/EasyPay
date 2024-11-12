@@ -26,10 +26,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers().ConfigureApiBehaviorOptions(options =>
-        {
-            options.SuppressMapClientErrors = true;
-        });
         services.AddHealthChecks();
         services.AddEndpointsApiExplorer();
         services.AddHttpContextAccessor();
@@ -91,7 +87,10 @@ public static class DependencyInjection
             };
             o.AddSecurityRequirement(securityRequirement);
         });
-
+        services.AddControllers().ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressMapClientErrors = true;
+        });
         return services;
     }
 }
