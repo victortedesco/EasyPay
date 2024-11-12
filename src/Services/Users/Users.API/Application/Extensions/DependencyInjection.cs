@@ -29,7 +29,8 @@ public static class DependencyInjection
         services.AddControllers().ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressMapClientErrors = true;
-        }); ;
+        });
+        services.AddHealthChecks();
         services.AddEndpointsApiExplorer();
         services.AddHttpContextAccessor();
         services.AddScoped<IKeyCloakService, KeyCloakService>();

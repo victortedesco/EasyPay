@@ -244,9 +244,11 @@ export class AuthService {
 
     const user: User = {
       id: decodedToken.sub,
-      name: decodedToken.fullname,
+      username: decodedToken.preferred_username,
+      fullname: decodedToken.fullname,
       email: decodedToken.email,
       document: decodedToken.document,
+      phoneNumber: decodedToken.phoneNumber,
     };
 
     return user;

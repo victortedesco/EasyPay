@@ -13,6 +13,7 @@ import { User } from "../../models/user.model";
 import { Transaction } from "../../models/transaction.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
+import { AuthService } from "../../services/authentication/authentication.service";
 
 @Component({
   selector: "app-transferencia",
@@ -31,35 +32,65 @@ import { HttpErrorResponse } from "@angular/common/http";
   ],
 })
 export class TransactionPageComponent implements OnInit {
-  private user?: User;
+  private userId?: string;
+  public user?: User;
   private userBalance: number = 0;
 
-  public recentTransfers: Transaction[] = [];
+  public recentTransactions: Transaction[] = [];
   public recentRecipients: User[] = [];
   public selectedRecipient?: User;
   public transferAmount: number = 0;
 
   transferType: any;
-  bankNumber: any;
-  cpfCnpj: any;
+  bankNumber: string = "";
+  document: string = "";
   pixKey: string = "";
 
   constructor(
+    private authService: AuthService,
     private userService: UserService,
     private transactionService: TransactionService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {});
-    this.loadRecentTransfers();
+    this.loadUser();
+    this.loadRecentTransactions();
     this.loadRecipients();
   }
 
-  loadRecentTransfers(): void {}
+  loadUser(): void {
+    this.user = this.authService.convertTokenToUser();
+    this.userId = this.user?.id;
+  }
 
-  loadRecipients(): void {}
+  loadRecentTransactions(): void {
+    if (!this.userId) return;
+
+    this.transactionService.getTransactionsByUserId(this.userId).subscribe({
+      next: (response) => {
+        if (!response) return;
+        this.recentTransactions = response.splice(0, 10);
+      },
+    });
+  }
+
+  loadRecipients(): void {
+    this.recentTransactions.filter(
+      (transaction) => transaction.receiverName != this.user?.fullname
+    );
+
+    this.recentRecipients = this.recentTransactions.map((transaction) => {
+      return {
+        id: transaction.receiverId,
+        username: "",
+        fullname: transaction.receiverName,
+        email: "",
+        document: "",
+        phoneNumber: "",
+      };
+    });
+  }
 
   loadBalance(): void {
     if (!this.user) return;

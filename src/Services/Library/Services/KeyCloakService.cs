@@ -9,7 +9,7 @@ public class KeyCloakService(IHttpContextAccessor contextAccessor) : IKeyCloakSe
 {
     private readonly IHttpContextAccessor _httpContextAccessor = contextAccessor;
 
-    public Guid GetUserId()
+    public Guid? GetUserId()
     {
         try
         {
@@ -18,7 +18,7 @@ public class KeyCloakService(IHttpContextAccessor contextAccessor) : IKeyCloakSe
         }
         catch (Exception)
         {
-            return Guid.Empty;
+            return null;
         }
     }
 

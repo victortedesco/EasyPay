@@ -1,16 +1,16 @@
 <div class="flex">
   <div class="hidden lg:flex h-screen sticky top-0 left-0">
-    <app-navbar></app-navbar>
+    <app-navbar [user]="user!"></app-navbar>
   </div>
 
   <div class="w-full">
-    <app-header pageName="Início"></app-header>
+    <app-header [pageName]="'Início'"></app-header>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 justify-evenly h-screen">
       <div class="flex flex-col justify-around lg:justify-start">
         <div class="flex lg:hidden justify-between align-middle m-4">
           <div class="flex flex-col justify-center align-middle">
-            <p class="font-semibold">Olá, {{ user?.name }}</p>
+            <p class="font-semibold">Olá, {{ user?.fullname }}</p>
             <p class="font-extralight">{{ dateUtils.getDateName() }}</p>
           </div>
           <img class="size-16" src="assets/icons/account_circle.png" />
@@ -24,7 +24,7 @@
             <div class="flex items-center ml-2">
               <p class="lg:text-2xl">
                 R$ @if (isBalanceVisible) {
-                {{ balance }}
+                {{ balance.toFixed(2) }}
                 } @else { ****.** }
               </p>
               <button class="flex ml-1" (click)="toggleBalanceVisibility()">
@@ -86,11 +86,11 @@
               class="flex flex-row m-4 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900"
             >
               <div class="flex flex-col">
-                <p class="ml-1 mt-1">{{ card.holderName }}</p>
+                <p class="ml-1 mt-1">{{ card.userName }}</p>
                 <p class="ml-1 text-xs">
                   {{ cardUtils.getCensoredNumber(card) }}
                 </p>
-                <p class="ml-1 mt-2">{{ card.color }} | {{ card.type }}</p>
+                <p class="ml-1 mt-2">{{ card.color }} | {{ card.cardFlag }}</p>
               </div>
               <img
                 class="mr-2 size-16"

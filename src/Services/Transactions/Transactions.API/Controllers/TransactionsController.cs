@@ -28,7 +28,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         var transaction = await _transactionService.GetByIdAsync(id);
@@ -53,7 +53,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (!userRoles.Contains("admin") && id != userId)
@@ -78,7 +78,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (!userRoles.Contains("admin") && id != userId)
@@ -104,7 +104,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (!userRoles.Contains("admin") && id != userId)
@@ -129,13 +129,13 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userDisplayName = _keyCloakService.GetUserDisplayName();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (request.RecipientId == userId)
             return Forbid();
 
-        var dto = new TransactionDTO(Guid.Empty, userId, userDisplayName, request.RecipientId, request.RecipientName, request.Amount, DateTime.UtcNow);
+        var dto = new TransactionDTO(Guid.Empty, userId.Value, userDisplayName, request.RecipientId, request.RecipientName, request.Amount, DateTime.UtcNow);
 
         var transaction = await _transactionService.AddAsync(dto);
 

@@ -26,13 +26,13 @@ public class UserController(ILogger<UserController> logger, IKeyCloakService key
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var keycloakId = _keyCloakService.GetUserId();
-        var keycloakRoles = _keyCloakService.GetUserRoles();
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
 
-        if (keycloakId == Guid.Empty)
+        if (userId is null)
             return Unauthorized();
 
-        if (keycloakId != id && !keycloakRoles.Contains("admin"))
+        if (userId != id && !userRoles.Contains("admin"))
             return Forbid();
 
         var user = await _userService.GetByIdAsync(id);
@@ -51,10 +51,19 @@ public class UserController(ILogger<UserController> logger, IKeyCloakService key
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByDocument(string document)
     {
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
+
+        if (userId is null)
+            return Unauthorized();
+
         var user = await _userService.GetByDocumentAsync(document);
 
         if (user is null)
             return NotFound();
+
+        if (userId != user.Id && !userRoles.Contains("admin"))
+            return Forbid();
 
         return Ok(user.ToViewModel());
     }
@@ -67,17 +76,18 @@ public class UserController(ILogger<UserController> logger, IKeyCloakService key
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByEmail(string email)
     {
-        var keycloakId = _keyCloakService.GetUserId();
-        var keycloakRoles = _keyCloakService.GetUserRoles();
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
 
-        if (keycloakId == Guid.Empty)
+        if (userId is null)
             return Unauthorized();
 
         var user = await _userService.GetByEmailAsync(email);
+
         if (user is null)
             return NotFound();
 
-        if (keycloakId != user.Id && !keycloakRoles.Contains("admin"))
+        if (userId != user.Id && !userRoles.Contains("admin"))
             return Forbid();
 
         return Ok(user.ToViewModel());
@@ -91,13 +101,13 @@ public class UserController(ILogger<UserController> logger, IKeyCloakService key
     [ProducesResponseType(typeof(decimal), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetBalance(Guid id)
     {
-        var keycloakId = _keyCloakService.GetUserId();
-        var keycloakRoles = _keyCloakService.GetUserRoles();
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
 
-        if (keycloakId == Guid.Empty)
+        if (userId is null)
             return Unauthorized();
 
-        if (keycloakId != id && !keycloakRoles.Contains("admin"))
+        if (userId != id && !userRoles.Contains("admin"))
             return Forbid();
 
         var user = await _userService.GetByIdAsync(id);
@@ -117,16 +127,16 @@ public class UserController(ILogger<UserController> logger, IKeyCloakService key
     [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status201Created)]
     public async Task<IActionResult> Add([FromBody] AddUserRequest request)
     {
-        var keycloakId = _keyCloakService.GetUserId();
-        var keycloakRoles = _keyCloakService.GetUserRoles();
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
 
-        if (keycloakId == Guid.Empty)
+        if (userId is null)
             return Unauthorized();
 
         if (request.Name == "admin")
             return BadRequest();
 
-        var user = new UserDTO(keycloakId, request.Name, request.Document, request.Email, 0);
+        var user = new UserDTO(userId.Value, request.Name, request.Document, request.Email, 0);
         user = await _userService.AddAsync(user);
 
         if (user is null)
@@ -145,13 +155,13 @@ public class UserController(ILogger<UserController> logger, IKeyCloakService key
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SetBalance(Guid id, [FromBody] decimal balance)
     {
-        var keycloakId = _keyCloakService.GetUserId();
-        var keycloakRoles = _keyCloakService.GetUserRoles();
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
 
-        if (keycloakId == Guid.Empty)
+        if (userId is null)
             return Unauthorized();
 
-        if (keycloakId != id)
+        if (userId != id)
             return Forbid();
 
         var user = await _userService.GetByIdAsync(id);

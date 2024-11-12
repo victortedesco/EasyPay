@@ -4,7 +4,7 @@
 
 <div class="flex">
     <div class="hidden lg:flex h-screen sticky top-0 left-0">
-      <app-navbar></app-navbar>
+      <app-navbar [user]="user!"></app-navbar>
     </div>
   
     <div class="w-full">
@@ -17,7 +17,7 @@
             <mat-form-field appearance="outline" class=" w-96 lg:ml-10 md:ml-10 ml-8">
               <mat-select [(ngModel)]="selectedRecipient" id="recipient">
                 <mat-option *ngFor="let recipient of recentRecipients" [value]="recipient">
-                  {{ recipient.name }}
+                  {{ recipient.fullname }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -52,7 +52,7 @@
             <input matInput [(ngModel)]="bankNumber" id="bankNumber" type="text" placeholder="Digite o número do Banco" class="w-96 mb-4 px-3 py-2 border rounded-md lg:ml-10 md:ml-10 ml-8">
         
             <label for="cpfCnpj" class="block text-gray-700 lg:ml-10 md:ml-10 ml-8">CPF ou CNPJ</label>
-            <input matInput [(ngModel)]="cpfCnpj" id="cpfCnpj" type="text" placeholder="XXX.XXX.XXX-XX|XX.XXX.XXX/XXXX-XX" class="w-96 mb-4 px-3 py-2 border rounded-md lg:ml-10 md:ml-10 ml-8">
+            <input matInput [(ngModel)]="document" id="document" type="text" placeholder="XXX.XXX.XXX-XX|XX.XXX.XXX/XXXX-XX" class="w-96 mb-4 px-3 py-2 border rounded-md lg:ml-10 md:ml-10 ml-8">
           </div>
         
           
@@ -74,7 +74,7 @@
         <div class="flex flex-col lg:h-fit items-start m-4 mt-14 border border-transparent box-border rounded-xl">
           <h3 class="font-extrabold lg:text-2xl ml-2">Transferências recentes</h3>
           <ul class="space-y-2 w-full">
-            <li *ngFor="let transfer of recentTransfers" class="flex justify-between items-center bg-white p-3 rounded-md shadow-sm">
+            <li *ngFor="let transfer of recentTransactions" class="flex justify-between items-center bg-white p-3 rounded-md shadow-sm">
               <span class="text-gray-700">{{ transfer.receiverName }}</span>
               <span class="text-gray-500">R$ {{ transfer.value }}</span>
             </li>

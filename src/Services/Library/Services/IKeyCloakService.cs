@@ -2,7 +2,7 @@
 
 public interface IKeyCloakService
 {
-    public Guid GetUserId();
+    public Guid? GetUserId();
     public string GetUserName();
     public string GetUserDisplayName();
     public IEnumerable<string> GetUserRoles();

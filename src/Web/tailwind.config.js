@@ -16,6 +16,7 @@ module.exports = {
         'custom-bg': '#cdf7f2'
       },
       height: {
+        '512': '32rem',
         '650': '40rem'
       },
     },

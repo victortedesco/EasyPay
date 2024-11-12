@@ -47,13 +47,17 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.user = this.authService.convertTokenToUser();
-      this.userId = this.user?.id;
+      this.loadUser();
       this.loadBalance();
       this.loadCards();
       this.loadRecentTransactions();
       this.isBalanceVisible = localStorage.getItem("showBalance") === "true";
     });
+  }
+
+  loadUser(): void {
+    this.user = this.authService.convertTokenToUser();
+    this.userId = this.user?.id;
   }
 
   loadBalance(): void {

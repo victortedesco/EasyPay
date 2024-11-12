@@ -5,16 +5,11 @@ using Users.API.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplication(builder.Configuration);
-builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection")!);
-builder.Services.AddControllers()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.SuppressMapClientErrors = true;
-    });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHealthChecks();
+var configuration = builder.Configuration;
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddInfrastructure(connectionString!);
+builder.Services.AddApplication(configuration);
 
 var app = builder.Build();
 

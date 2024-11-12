@@ -1,8 +1,8 @@
 export interface Transaction {
   id: string;
-  senderId: number;
+  senderId: string;
   senderName: string;
-  receiverId: number;
+  receiverId: string;
   receiverName: string;
   value: number;
   date: Date;

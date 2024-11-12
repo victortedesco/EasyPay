@@ -1,0 +1,55 @@
+<div class="flex h-screen p-2 lg:p-0">
+  <div class="hidden lg:flex h-screen sticky top-0 left-0">
+    <app-navbar [user]="user!"></app-navbar>
+  </div>
+
+  <div class="w-full">
+    <app-header pageName="Extrato"></app-header>
+
+    <div class="flex lg:hidden p-2 w-full justify-between">
+      <a class="text-2xl font-bold" href="/profile">
+        <mat-icon class="align-middle" aria-hidden="" aria-label="Back">arrow_back</mat-icon>
+      </a>
+      <p class="text-2xl font-bold mr-6">Extrato</p>
+      <div></div>
+    </div>
+    <div class="flex flex-col items-end h-650 p-2 m-4 border border-black box-border rounded-xl bg-custom-2">
+      
+      <div class="dropdown-container">
+        <mat-icon (click)="menuTrigger.openMenu()" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger"
+          aria-hidden="false" aria-label="Filter">filter_list</mat-icon>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item disabled clas="mat-subheader">Recentes</button>
+          <button mat-menu-item>Ultimo Mês</button>
+          <button mat-menu-item>Ultimos 3 Mêses</button>
+          <button mat-menu-item>Este Ano</button>
+          <button mat-menu-item>Todos</button>
+        </mat-menu>
+      </div>
+      
+      <div class="flex flex-row w-full lg:text-xl">
+        @for (transaction of recentTransactions; track transaction.id) {
+        <div class="flex p-1 mb-2 w-full justify-between items-center text-center">
+          <div class="flex flex-col items-start mt-2 g-4">
+            <p>+ R$ {{ transaction.value }}</p>
+            <button (click)="viewTransaction(transaction)">
+              {{ transaction.receiverName }}
+            </button>
+          </div>
+          <div class="flex justify-between">
+            <p class="text-sm">
+              {{ dateUtils.getDateFormatted(transaction.date) }}
+            </p>
+            <p class="text-sm ml-1">
+              {{ dateUtils.getHourFormatted(transaction.date) }}
+            </p>
+          </div>
+        </div>
+        }
+      </div>
+      <div class="absolute w-64 h-64 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-25 lg:hidden">
+        <img src="assets/logo.png" alt="">
+      </div>
+    </div>
+  </div>
+</div>

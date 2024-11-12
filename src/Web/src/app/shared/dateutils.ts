@@ -15,7 +15,7 @@ export class DateUtils {
       "sexta-feira",
       "sábado",
     ];
-    
+
     const nameOfTheDay = weekDays[date.getDay()];
 
     return `${nameOfTheDay}, ${day}/${month}/${year}`;
