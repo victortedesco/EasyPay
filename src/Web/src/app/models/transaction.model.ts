@@ -5,5 +5,5 @@ export interface Transaction {
   receiverId: string;
   receiverName: string;
   value: number;
-  date: Date;
+  date: string;
 }

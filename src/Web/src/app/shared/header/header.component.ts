@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { AuthService } from '../../services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,4 +11,11 @@ import { Component, Input } from '@angular/core';
 })
 export class HeaderComponent {
   @Input({ required: true }) pageName!: string;
+
+  constructor(private router: Router, private authService: AuthService) {}
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate([""]);
+  }
 }

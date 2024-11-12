@@ -11,8 +11,6 @@ import { FormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
 import { User } from "../../models/user.model";
 import { Transaction } from "../../models/transaction.model";
-import { ActivatedRoute, Router } from "@angular/router";
-import { HttpErrorResponse } from "@angular/common/http";
 import { AuthService } from "../../services/authentication/authentication.service";
 
 @Component({
@@ -49,9 +47,7 @@ export class TransactionPageComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private transactionService: TransactionService,
-    private router: Router
-  ) {}
+    private transactionService: TransactionService  ) {}
 
   ngOnInit(): void {
     this.loadUser();
@@ -111,7 +107,7 @@ export class TransactionPageComponent implements OnInit {
   }
 
   confirmTransfer(): void {
-    if (!this.selectedRecipient || !this.transferAmount) return;
+    if (this.pixKey.length != 11 || !this.transferAmount) return;
     if (this.transferAmount > this.userBalance - 200) {
       return;
     }
@@ -123,16 +119,24 @@ export class TransactionPageComponent implements OnInit {
       receiverId: this.selectedRecipient?.id!,
       receiverName: this.selectedRecipient?.fullname!,
       value: this.transferAmount,
-      date: new Date(),
+      date: new Date().toUTCString()
     };
 
-    this.transactionService.addTransaction(transaction).subscribe({
+    this.userService.getByDocument(this.pixKey).subscribe({
       next: (response) => {
-        this.loadBalance();
-        this.addToBalance(this.user!, this.transferAmount * -1);
-        this.addToBalance(this.selectedRecipient!, this.transferAmount);
-        this.recentTransactions.unshift(response);
+        this.selectedRecipient = response;
+        this.transactionService.addTransaction(transaction).subscribe({
+          next: (response) => {
+            this.loadBalance();
+            this.addToBalance(this.user!, this.transferAmount * -1);
+            this.addToBalance(this.selectedRecipient!, this.transferAmount);
+            this.recentTransactions.unshift(response);
+          },
+        });
       },
-    });
+      error: () => {
+        return;
+      }
+    })
   }
 }

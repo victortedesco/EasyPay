@@ -1,22 +1,22 @@
 <div class="flex h-screen p-2 lg:p-0">
-    <div class="hidden lg:flex h-screen sticky top-0 left-0">
-      <app-navbar [user]="user!"></app-navbar>
+  <div class="hidden lg:flex h-screen sticky top-0 left-0">
+    <app-navbar [user]="user!"></app-navbar>
+  </div>
+
+  <div class="w-full">
+    <app-header pageName="Informações do Cartão"></app-header>
+
+    <div class="flex lg:hidden p-2 w-full justify-between">
+      <a class="text-2xl font-bold" href="/cards">
+        <mat-icon class="align-middle" aria-hidden="" aria-label="Back">arrow_back</mat-icon>
+      </a>
+      <p class="text-2xl font-bold mr-6">Cartão</p>
+      <div></div>
     </div>
-  
-    <div class="w-full">
-      <app-header pageName="Informações do Cartão"></app-header>
-  
-      <div class="flex lg:hidden p-2 w-full justify-between">
-        <a class="text-2xl font-bold" href="/cards">
-          <mat-icon class="align-middle" aria-hidden="" aria-label="Back">arrow_back</mat-icon>
-        </a>
-        <p class="text-2xl font-bold mr-6">Cartão</p>
-        <div></div>
-      </div>
+    <div class="flex flex-col items-center h-full w-full">
       <div class="p-10 lg:flex hidden flex-col w-full lg:w-2/5 text-bg-color">
         <div
-          class="flex flex-row m-4 h-24 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900"
-        >
+          class="flex flex-row m-4 h-24 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900">
           <div class="flex flex-col">
             <p class="ml-1 mt-1">{{ card?.userName }}</p>
             <p class="ml-1 text-xs">
@@ -24,52 +24,45 @@
             </p>
             <p class="ml-1 mt-2">{{ card?.color }} | {{ card?.cardFlag }}</p>
           </div>
-          <img
-            class="mr-2 size-16"
-            src="{{ cardUtils.getCardIcon(card) }}"
-          />
+          <img class="mr-2 size-16" src="{{ cardUtils.getCardIcon(card) }}" />
         </div>
       </div>
-      <div class="flex flex-col  lg:flex-row items-start mx-auto md:h-fit md:w-fit h-650 p-2 m-4 border border-black box-border rounded-xl bg-custom-2">
-        <div class="lg:hidden flex flex-col w-full lg:w-1/3  text-bg-color">
-            <div
-              class="flex flex-row m-4 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900"
-            >
-              <div class="flex flex-col">
-                <p class="ml-1 mt-1">{{ card?.userName }}</p>
-                <p class="ml-1 text-xs">
-                  {{ cardUtils.getCensoredNumber(card) }}
-                </p>
-                <p class="ml-1 mt-2">{{ card?.color }} | {{ card?.cardFlag }}</p>
-              </div>
-              <img
-                class="mr-2 size-16"
-                src="{{ cardUtils.getCardIcon(card) }}"
-              />
+      <div
+        class="flex flex-col lg:flex-row items-center mx-auto md:h-fit md:w-fit h-650 p-2 m-4 border border-black box-border rounded-xl bg-custom-2">
+        <div class="lg:hidden flex flex-col w-full lg:w-1/3 text-bg-color">
+          <div
+            class="flex flex-row m-4 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900">
+            <div class="flex flex-col">
+              <p class="ml-1 mt-1">{{ card?.userName }}</p>
+              <p class="ml-1 text-xs">
+                {{ cardUtils.getCensoredNumber(card) }}
+              </p>
+              <p class="ml-1 mt-2">{{ card?.color }} | {{ card?.cardFlag }}</p>
             </div>
-          </div> 
-                <div class="flex flex-col justify-between p-4">
-                    <h2 class="flex flex-raw text-lg font-bold mb-4">Crédito/Débito</h2>
-                    <div class ="flex flex-col">
-                        <p class="font-bold">CVV</p>
-                        <p>{{ card?.securityNumber }}</p>
-                    </div>
-                    <div>
-                        <p class="font-bold">Validade</p>
-                        <p>{{ cardUtils.getExpirationDate(card) }}</p>
-                    </div>
-                </div>
-        
-                <!-- Botões -->
-                <div class="grid grid-cols-2 gap-4 p-4">
-                    <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Alt. Limite</button>
-                    <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Opções</button>
-                    <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Bloquear</button>
-                    <button (click)="deleteCard()" class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Deletar</button>
-                </div>
+            <img class="mr-2 size-16" src="{{ cardUtils.getCardIcon(card) }}" />
+          </div>
+        </div>
+        <div class="flex flex-col justify-between p-4 lg:mr-4">
+          <h2 class="text-lg font-bold mb-4 ">Crédito/Débito</h2>
+          <div class="flex flex-col">
+            <p class="font-bold">CVV</p>
+            <p class="text-end">{{ card?.securityNumber }}</p>
+          </div>
+          <div>
+            <p class="font-bold">Validade</p>
+            <p class="text-end">{{ cardUtils.getExpirationDate(card) }}</p>
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="grid grid-cols-2 gap-4 p-4">
+          <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Alt. Limite</button>
+          <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Opções</button>
+          <button class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Bloquear</button>
+          <button (click)="deleteCard()"
+            class="bg-custom-0 border border-black rounded-md px-4 py-2 font-semibold">Deletar</button>
+        </div>
       </div>
     </div>
   </div>
-
-  
-  
+</div>

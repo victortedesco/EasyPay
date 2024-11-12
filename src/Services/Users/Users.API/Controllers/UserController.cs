@@ -61,8 +61,8 @@ public class UserController(IKeyCloakService keyCloakService, IUserService userS
         if (user is null)
             return NotFound();
 
-        if (userId != user.Id && !userRoles.Contains("admin"))
-            return Forbid();
+        //if (userId != user.Id && !userRoles.Contains("admin"))
+        //    return Forbid();
 
         return Ok(user.ToViewModel());
     }

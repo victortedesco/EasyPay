@@ -21,8 +21,9 @@ export class DateUtils {
     return `${nameOfTheDay}, ${day}/${month}/${year}`;
   }
 
-  getDateFormatted(date?: Date): string {
-    date ??= new Date();
+  getDateFormatted(dateInput?: string): string {
+    if (!dateInput) return "";
+    const date = new Date(dateInput);
 
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -31,8 +32,10 @@ export class DateUtils {
     return `${day}/${month}/${year}`;
   }
 
-  getHourFormatted(date?: Date): string {
-    date ??= new Date();
+  getHourFormatted(dateInput?: string): string {
+    if (!dateInput) return "";
+
+    const date = new Date(dateInput);
 
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");

@@ -1,45 +1,34 @@
 import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
+  HttpHandlerFn,
   HttpRequest,
 } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, switchMap } from "rxjs";
+import { inject } from "@angular/core";
 import { AuthResponse, AuthService } from "./authentication.service";
+import { switchMap } from "rxjs";
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
+  // Inject the current `AuthService` and use it to get an authentication token:
+  const authToken = inject(AuthService).getAccessToken();
+  const isTokenExpired = inject(AuthService).isTokenExpired(authToken);
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    if (this.authService.isAuthenticated()) {
-      const token = this.authService.getAccessToken();
+  if (authToken === "") return next(req);
 
-      if (this.authService.isTokenExpired(token)) {
-        return this.authService.refreshToken().pipe(
-          switchMap((newAccessToken: AuthResponse) => {
-            const clonedReq = req.clone({
-              headers: req.headers.set(
-                "Authorization",
-                `Bearer ${newAccessToken}`
-              ),
-            });
-            return next.handle(clonedReq);
-          })
-        );
-      }
-
-      const clonedReq = req.clone({
-        headers: req.headers.set("Authorization", `Bearer ${token}`),
-      });
-
-      return next.handle(clonedReq);
-    }
-
-    return next.handle(req);
+  if (isTokenExpired) {
+    return inject(AuthService).refreshToken().pipe(
+      switchMap((newAccessToken: AuthResponse) => {
+        const clonedReq = req.clone({
+          headers: req.headers.append(
+            "Authorization",
+            `Bearer ${newAccessToken}`
+          ),
+        });
+        return next(clonedReq);
+      })
+    );
   }
+  // Clone the request to add the authentication header.
+  const newReq = req.clone({
+    headers: req.headers.append('Authorization', `Bearer ${authToken}`),
+  });
+  return next(newReq);
 }
