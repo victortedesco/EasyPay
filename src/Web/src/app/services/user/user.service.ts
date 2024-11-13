@@ -20,12 +20,12 @@ export class UserService {
     return this.http.get<User>(`${this.url}/document/${document}`);
   }
 
-  getBalance(userId: string) : Observable<number> {
+  getBalance(userId: string): Observable<number> {
     return this.http.get<number>(`${this.url}/balance/${userId}`);
   }
 
-  setBalance(userId: string, value: number) : Observable<void> {
-    return this.http.put<void>(`${this.url}/balance/${userId}`, value);
+  setBalance(userId: string, value: number): Observable<void> {
+    return this.http.patch<void>(`${this.url}/balance/${userId}`, value);
   }
 
   addUser(user: AddUserRequest): Observable<User> {

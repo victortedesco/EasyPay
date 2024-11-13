@@ -10,6 +10,7 @@ import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { DateUtils } from "../../shared/dateutils";
+import { UserService } from "../../services/user/user.service";
 
 @Component({
   selector: "app-receipt-page",
@@ -31,7 +32,8 @@ export class ReceiptPageComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +51,20 @@ export class ReceiptPageComponent implements OnInit {
       .getTransactionById(transactionId)
       .subscribe((transaction) => {
         this.transaction = transaction;
+        this.loadSender(transaction.senderId);
+        this.loadReceiver(transaction.recipientId);
       });
+  }
+
+  loadSender(senderId: string): void {
+    this.userService.getById(senderId).subscribe((sender) => {
+      this.sender = sender;
+    });
+  }
+
+  loadReceiver(recipientId: string): void {
+    this.userService.getById(recipientId).subscribe((receiver) => {
+      this.receiver = receiver;
+    });
   }
 }

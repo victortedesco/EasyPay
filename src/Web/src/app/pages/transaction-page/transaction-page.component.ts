@@ -12,6 +12,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { User } from "../../models/user.model";
 import { Transaction } from "../../models/transaction.model";
 import { AuthService } from "../../services/authentication/authentication.service";
+import { AddTransactionRequest } from "../../models/request/add.transaction.request";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-transferencia",
@@ -45,14 +47,15 @@ export class TransactionPageComponent implements OnInit {
   pixKey: string = "";
 
   constructor(
+    private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    private transactionService: TransactionService  ) {}
+    private transactionService: TransactionService
+  ) {}
 
   ngOnInit(): void {
     this.loadUser();
     this.loadRecentTransactions();
-    this.loadRecipients();
   }
 
   loadUser(): void {
@@ -66,21 +69,22 @@ export class TransactionPageComponent implements OnInit {
     this.transactionService.getTransactionsByUserId(this.userId).subscribe({
       next: (response) => {
         if (!response) return;
-        this.recentTransactions = response.splice(0, 10);
+        this.recentTransactions = response.splice(0, 5);
+        this.loadRecipients();
       },
     });
   }
 
   loadRecipients(): void {
-    this.recentTransactions.filter(
-      (transaction) => transaction.receiverName != this.user?.fullname
+    this.recentTransactions = this.recentTransactions.filter(
+      (transaction) => transaction.recipientName != this.user?.fullname
     );
 
     this.recentRecipients = this.recentTransactions.map((transaction) => {
       return {
-        id: transaction.receiverId,
+        id: transaction.recipientId,
         username: "",
-        fullname: transaction.receiverName,
+        fullname: transaction.recipientName,
         email: "",
         document: "",
         phoneNumber: "",
@@ -107,36 +111,34 @@ export class TransactionPageComponent implements OnInit {
   }
 
   confirmTransfer(): void {
-    if (this.pixKey.length != 11 || !this.transferAmount) return;
-    if (this.transferAmount > this.userBalance - 200) {
+    if (this.pixKey.length > 14 && this.pixKey.length < 11 || !this.transferAmount) return;
+
+    if (this.transferAmount - 200 > this.userBalance) {
       return;
     }
-
-    const transaction: Transaction = {
-      id: "",
-      senderId: this.user?.id!,
-      senderName: this.user?.fullname!,
-      receiverId: this.selectedRecipient?.id!,
-      receiverName: this.selectedRecipient?.fullname!,
-      value: this.transferAmount,
-      date: new Date().toUTCString()
-    };
+    
+    this.transferAmount = Math.abs(this.transferAmount);
 
     this.userService.getByDocument(this.pixKey).subscribe({
       next: (response) => {
+        console.log(response);
         this.selectedRecipient = response;
+        const transaction: AddTransactionRequest = {
+          recipientId: this.selectedRecipient?.id!,
+          recipientName: this.selectedRecipient?.fullname!,
+          amount: this.transferAmount,
+        };
+        console.log(transaction);
         this.transactionService.addTransaction(transaction).subscribe({
           next: (response) => {
             this.loadBalance();
             this.addToBalance(this.user!, this.transferAmount * -1);
             this.addToBalance(this.selectedRecipient!, this.transferAmount);
             this.recentTransactions.unshift(response);
+            this.router.navigate(["/receipt", { id: response.id }]);
           },
         });
       },
-      error: () => {
-        return;
-      }
-    })
+    });
   }
 }

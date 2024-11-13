@@ -160,13 +160,15 @@ export class AuthService {
 
         const body = {
           username: username,
-          fullname: fullname,
           enabled: true,
           emailVerified: true,
           email: email,
-          phoneNumber: phoneNumber,
-          document: document,
-          birthdate: birthdate,
+          attributes: {
+            fullname: fullname,
+            phoneNumber: phoneNumber,
+            document: document,
+            birthdate: birthdate,
+          },
           credentials: [
             {
               type: "password",

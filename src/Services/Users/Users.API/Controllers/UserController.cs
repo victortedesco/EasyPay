@@ -31,8 +31,8 @@ public class UserController(IKeyCloakService keyCloakService, IUserService userS
         if (userId is null)
             return Unauthorized();
 
-        if (userId != id && !userRoles.Contains("admin"))
-            return Forbid();
+        //if (userId != id && !userRoles.Contains("admin"))
+            //return Forbid();
 
         var user = await _userService.GetByIdAsync(id);
 
@@ -86,8 +86,8 @@ public class UserController(IKeyCloakService keyCloakService, IUserService userS
         if (user is null)
             return NotFound();
 
-        if (userId != user.Id && !userRoles.Contains("admin"))
-            return Forbid();
+        //if (userId != user.Id && !userRoles.Contains("admin"))
+            //return Forbid();
 
         return Ok(user.ToViewModel());
     }
@@ -106,8 +106,8 @@ public class UserController(IKeyCloakService keyCloakService, IUserService userS
         if (userId is null)
             return Unauthorized();
 
-        if (userId != id && !userRoles.Contains("admin"))
-            return Forbid();
+        //if (userId != id && !userRoles.Contains("admin"))
+            //return Forbid();
 
         var user = await _userService.GetByIdAsync(id);
 
@@ -160,15 +160,15 @@ public class UserController(IKeyCloakService keyCloakService, IUserService userS
         if (userId is null)
             return Unauthorized();
 
-        if (userId != id)
-            return Forbid();
+        //if (userId != id)
+            //return Forbid();
 
         var user = await _userService.GetByIdAsync(id);
 
         if (user is null)
             return NotFound();
 
-        if (balance < -200)
+        if (user.Balance < -200)
             return BadRequest();
 
         await _userService.SetUserBalance(id, balance);

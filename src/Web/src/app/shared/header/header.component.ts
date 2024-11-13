@@ -11,11 +11,4 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent {
   @Input({ required: true }) pageName!: string;
-
-  constructor(private router: Router, private authService: AuthService) {}
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate([""]);
-  }
 }

@@ -105,7 +105,7 @@ export class ProfilePageComponent implements OnInit {
     this.transactionService.getTransactionsByUserId(this.userId).subscribe({
       next: (response) => {
         if (!response) return;
-        this.recentTransactions = response.splice(0, 10);
+        this.recentTransactions = response.splice(0, 5);
       },
     });
   }
