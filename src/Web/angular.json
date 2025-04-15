@@ -25,9 +25,12 @@
                 "glob": "**/*",
                 "input": "src/assets/",
                 "output": "assets/"
+                "input": "src/assets/",
+                "output": "assets/"
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/custom-theme.scss",
               "src/styles.css"
             ],
@@ -85,6 +88,8 @@
                 "glob": "**/*",
                 "input": "src/assets/",
                 "output": "assets/"
+                "input": "src/assets/",
+                "output": "assets/"
               }
             ],
             "styles": [
@@ -92,12 +97,14 @@
             ],
             "scripts": [],
             "karmaConfig": "karma.conf.js"
+            "scripts": [],
+            "karmaConfig": "karma.conf.js"
           }
         }
       }
     }
-  }, 
-  "cli":{
+  },
+  "cli": {
     "analytics": false
   }
 }

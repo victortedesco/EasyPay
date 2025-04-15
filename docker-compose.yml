@@ -1,7 +1,7 @@
 name: easypay
 
 services:
-  sqlserver:
+  sql.server:
     image: mcr.microsoft.com/mssql/server:2022-latest
     volumes:
       - sqlserver.data:/var/opt/mssql
@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: src/Services/Users/Users.API/Dockerfile
     depends_on:
-      sqlserver:
+      sql.server:
         condition: service_healthy
 
   transactions.api:
@@ -21,17 +21,22 @@ services:
       context: .
       dockerfile: src/Services/Transactions/Transactions.API/Dockerfile
     depends_on:
-      sqlserver:
+      sql.server:
         condition: service_healthy
 
-  authentication.api:
-    image: easypay/authentication/api:${TAG:-dev}
-    build:
-      context: .
-      dockerfile: src/Services/Authentication/Authentication.API/Dockerfile
-    depends_on:
-      sqlserver:
-        condition: service_healthy
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    command:
+      - "start-dev"
+      - "--import-realm"
+      - "--http-port=8070"
+    environment:
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm-export.json
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./imports/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - keycloak.data:/opt/keycloak/data/
 
   web:
     image: easypay/web:${TAG:-dev}
@@ -41,3 +46,4 @@ services:
 
 volumes:
   sqlserver.data:
+  keycloak.data:

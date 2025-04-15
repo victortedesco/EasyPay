@@ -1,0 +1,140 @@
+<div class="flex items-center justify-center overflow-hidden">
+  <div class="flex flex-col items-center justify-center">
+    <img class="p-4 size-32 lg:size-40" src="assets/logo.png" />
+    <form
+      class="bg-custom-3 w-72 h-fit rounded-md flex flex-col items-center p-4 border border-black shadow-lg shadow-black/25"
+    >
+      <h3 class="text-4xl">Cadastro</h3>
+      <div class="w-full mb-2">
+        <h3 class="text-2xl">Nome</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          [(ngModel)]="fullname"
+          type="text"
+          name="fullname"
+          placeholder="Digite seu Nome"
+        />
+      </div>
+      <div class="w-full mb-2">
+        <h3 class="text-2xl">Email</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          [(ngModel)]="email"
+          type="email"
+          name="email"
+          placeholder="Digite o Email"
+        />
+      </div>
+      <div class="w-full mb-2">
+        <h3 class="text-2xl">CPF</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          [(ngModel)]="document"
+          type="text"
+          name="document"
+          placeholder="Digite o CPF"
+        />
+      </div>
+      <div class="w-full mb-2">
+        <h3 class="text-2xl">Telefone</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          [(ngModel)]="phoneNumber"
+          type="text"
+          name="phoneNumber"
+          placeholder="Digite o Telefone"
+        />
+      </div>
+      <div class="w-full mb-2">
+        <h3 class="text-2xl">Data de Nascimento</h3>
+        <input
+          class="w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          [(ngModel)]="birthDate"
+          type="date"
+          name="birthDate"
+          placeholder="Coloque sua Data de Nascimento"
+        />
+      </div>
+      <div [formGroup]="passwordForm" class="w-full mb-2">
+        <h3 for="password" class="text-2xl">Senha</h3>
+        <input
+          class="focus:outline-none w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          type="password"
+          placeholder="Digite a senha"
+          formControlName="password"
+          name="password"
+          (focus)="onPasswordFocus(true)"
+          (blur)="onPasswordFocus(false)"
+          (input)="checkRequirements()"
+        />
+
+        <div
+          *ngIf="showRequirements"
+          class="rounded-md shadow-lg text-sm absolute bg-white text-blck border border-black p-4 max-w-xs z-10"
+        >
+          <p class="mb-1.5 m-0 p-0 font-bold">Usar senha forte</p>
+          <p class="mb-1.5 m-0 p-0">Sua senha deve conter:</p>
+          <ul class="text-red-600 m-0 p-0 list-none">
+            <li
+              [class.text-green-600]="minLengthMet"
+              [class.text-red-500]="!minLengthMet"
+            >
+              Mínimo de 8 caracteres
+            </li>
+            <li
+              [class.text-green-600]="uppercaseMet"
+              [class.text-red-500]="!uppercaseMet"
+            >
+              Ao menos uma letra maiúscula
+            </li>
+            <li
+              [class.text-green-600]="lowercaseMet"
+              [class.text-red-500]="!lowercaseMet"
+            >
+              Ao menos uma letra minúscula
+            </li>
+            <li
+              [class.text-green-600]="numberMet"
+              [class.text-red-500]="!numberMet"
+            >
+              Ao menos um número
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div [formGroup]="passwordForm" class="w-full mb-2">
+        <h3 class="text-2xl">Confirmar Senha</h3>
+        <input
+          class="focus:outline-none w-full p-1 border border-black shadow-lg shadow-black/25 rounded-md"
+          type="password"
+          placeholder="Digite a mesma senha"
+          formControlName="confirmPassword"
+          (focus)="onConfirmPasswordFocus(true)"
+          (blur)="onConfirmPasswordFocus(false)"
+          (blur)="onConfirmPasswordBlur()"
+          (input)="checkPasswordMatch()"
+        />
+      </div>
+
+      <div
+        *ngIf="showConfirmRequirements && !passwordsMatch"
+        class="rounded-md shadow-lg text-sm absolute bg-white text-blck border border-black p-4 max-w-xs z-10"
+      >
+        <p class="text-red-500">As senhas não coincidem</p>
+      </div>
+
+      <div class="p-4 gap-2 flex flex-col items-center">
+        <a class="text-sm" href="/login"
+          >Clique aqui para ir para a página de login</a
+        >
+        <button
+          class="bg-custom-1 w-28 h-9 text-2xl rounded-md border border-black shadow-lg shadow-black/25"
+          (click)="performRegistration()"
+        >
+          Cadastrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

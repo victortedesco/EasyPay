@@ -12,6 +12,6 @@ public static class TransactionsDTOExtensions
 
     public static TransactionDTO ToDTO(this Transaction transaction)
     {
-        return new TransactionDTO(transaction.Id, transaction.SenderId, transaction.RecipientId, transaction.Amount, transaction.Date);
+        return new TransactionDTO(transaction.Id, transaction.SenderId, transaction.SenderName, transaction.RecipientId, transaction.RecipientName, transaction.Amount, transaction.Date);
     }
 }

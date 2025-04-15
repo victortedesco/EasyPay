@@ -5,14 +5,12 @@ using Transactions.Infrastructure.Data;
 using Transactions.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var configuration = builder.Configuration;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddApplication(configuration);
 builder.Services.AddInfrastructure(connectionString!);
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddApplication(configuration);
 
 var app = builder.Build();
 
@@ -22,13 +20,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors();
-app.UseAuthorization();
 app.UseAuthentication();
-
+app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 _ = Task.Run(() => ExecuteMigrationsPeriodically(app));
 

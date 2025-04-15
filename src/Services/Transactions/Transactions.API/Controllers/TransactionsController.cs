@@ -17,7 +17,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
     private readonly IKeyCloakService _keyCloakService = keyCloakService;
     private readonly ITransactionService _transactionService = transactionService;
 
-    [HttpGet("id/{id:guid}")]
+    [HttpGet("{id:guid}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -28,7 +28,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         var transaction = await _transactionService.GetByIdAsync(id);
@@ -42,6 +42,31 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         return Ok(transaction.ToViewModel());
     }
 
+    [HttpGet("userId/{id:guid}")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(IEnumerable<TransactionViewModel>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByUserId(Guid id)
+    {
+        var userId = _keyCloakService.GetUserId();
+        var userRoles = _keyCloakService.GetUserRoles();
+
+        if (userId is null)
+            return Unauthorized();
+
+        if (!userRoles.Contains("admin") && id != userId)
+            return Forbid();
+
+        var transactions = await _transactionService.GetByUserIdAsync(id);
+
+        if (!transactions.Any())
+            return NoContent();
+
+        return Ok(transactions.ToViewModel());
+    }
+
     [HttpGet("senderId/{id:guid}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -53,7 +78,7 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (!userRoles.Contains("admin") && id != userId)
@@ -74,12 +99,12 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(IEnumerable<TransactionViewModel>), StatusCodes.Status200OK)]
 
-    public async Task<IActionResult> GetByIdRecipient(Guid id)
+    public async Task<IActionResult> GetByRecipientId(Guid id)
     {
         var userId = _keyCloakService.GetUserId();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (!userRoles.Contains("admin") && id != userId)
@@ -101,19 +126,20 @@ public class TransactionsController(IKeyCloakService keyCloakService, ITransacti
     public async Task<IActionResult> Add([FromBody] AddTransactionRequest request)
     {
         var userId = _keyCloakService.GetUserId();
+        var userDisplayName = _keyCloakService.GetUserDisplayName();
         var userRoles = _keyCloakService.GetUserRoles();
 
-        if (Guid.Empty == userId)
+        if (userId is null)
             return Unauthorized();
 
         if (request.RecipientId == userId)
             return Forbid();
 
-        var dto = new TransactionDTO(Guid.Empty, userId, request.RecipientId, request.Amount, DateTime.UtcNow);
+        var dto = new TransactionDTO(Guid.Empty, userId.Value, userDisplayName, request.RecipientId, request.RecipientName, request.Amount, DateTime.UtcNow);
 
         var transaction = await _transactionService.AddAsync(dto);
 
-        return CreatedAtAction(nameof(GetById), new { id = transaction.Id}, transaction.ToViewModel());
+        return CreatedAtAction(nameof(GetById), new { id = transaction.Id }, transaction.ToViewModel());
     }
 }
 

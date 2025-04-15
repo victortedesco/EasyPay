@@ -9,21 +9,26 @@ public class KeyCloakService(IHttpContextAccessor contextAccessor) : IKeyCloakSe
 {
     private readonly IHttpContextAccessor _httpContextAccessor = contextAccessor;
 
-    public Guid GetUserId()
+    public Guid? GetUserId()
     {
-        try
+        var sub = _httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+        if (Guid.TryParse(sub, out var userId))
         {
-            return Guid.Parse(_httpContextAccessor.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            return userId;
         }
-        catch (Exception)
-        {
-            return Guid.Empty;
-        }
+
+        return null;
     }
 
     public string GetUserName()
     {
         return _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
+    }
+
+    public string GetUserDisplayName()
+    {
+        return _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "fullname")?.Value;
     }
 
     public IEnumerable<string> GetUserRoles()

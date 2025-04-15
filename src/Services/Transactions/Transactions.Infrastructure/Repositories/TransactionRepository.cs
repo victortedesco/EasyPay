@@ -14,14 +14,19 @@ public class TransactionRepository(ApplicationDbContext dataContext) : ITransact
         return await _transactions.FindAsync(id);
     }
 
+    public async Task<IEnumerable<Transaction>> GetByUserIdAsync(Guid id)
+    {
+        return await _transactions.OrderByDescending(t => t.Date).Where(u => u.SenderId == id || u.RecipientId == id).ToListAsync();
+    }
+
     public async Task<IEnumerable<Transaction>> GetBySenderIdAsync(Guid id)
     {
-        return await _transactions.Where(u => u.SenderId == id).ToListAsync();
+        return await _transactions.OrderByDescending(t => t.Date).Where(u => u.SenderId == id).ToListAsync();
     }
 
     public async Task<IEnumerable<Transaction>> GetByRecipientIdAsync(Guid id)
     {
-        return await _transactions.Where(u => u.RecipientId == id).ToListAsync();
+        return await _transactions.OrderByDescending(t => t.Date).Where(u => u.RecipientId == id).ToListAsync();
     }
 
     public async Task<Transaction> AddAsync(Transaction transaction)

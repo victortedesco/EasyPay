@@ -1,0 +1,23 @@
+<div class="hidden lg:flex flex-col bg-custom-1 h-full sticky top-0 left-0">
+  <div class="flex flex-col items-center justify-between align-middle m-2">
+    <img (click)="logout()" class="cursor-pointer size-16" src="assets/icons/account_circle.png" />
+    <div class="flex flex-col text-center align-middle">
+      <p class="font-semibold">Olá, {{ user.fullname }}</p>
+      <p class="font-extralight">{{ dateUtils.getDateName() }}</p>
+    </div>
+  </div>
+  <div class="flex flex-col mt-16 items-center text-xl">
+    <a class="m-2 border-b border-gray-500 text-center w-2/3" href="/profile"
+      >Início</a
+    >
+    <a class="m-2 border-b border-gray-500 text-center w-2/3" href="/send"
+      >Transferir</a
+    >
+    <a class="m-2 border-b border-gray-500 text-center w-2/3" href="/statement"
+      >Extrato</a
+    >
+    <a class="m-2 border-b border-gray-500 text-center w-2/3" href="/cards"
+      >Cartões</a
+    >
+  </div>
+</div>

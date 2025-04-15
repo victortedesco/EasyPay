@@ -1,0 +1,39 @@
+<div class="flex h-screen p-2 lg:p-0">
+  <div class="hidden lg:flex h-screen sticky top-0 left-0">
+    <app-navbar [user]="user!"></app-navbar>
+  </div>
+
+  <div class="w-full">
+    <app-header pageName="Cartões"></app-header>
+
+    <div class="flex lg:hidden p-2 w-full justify-between">
+      <a class="text-2xl font-bold" href="/profile">
+        <mat-icon class="align-middle" aria-hidden="" aria-label="Back"
+          >arrow_back</mat-icon
+        >
+      </a>
+      <p class="text-2xl font-bold mr-6">Cartões</p>
+      <div></div>
+    </div>
+    <div
+      class="flex flex-col items-end mx-auto md:h-96 md:w-96 h-650 p-2 m-4 border border-black box-border rounded-xl bg-custom-2"
+    >
+      <div class="flex flex-col w-full text-bg-color">
+        @for (card of cards; track card.id) {
+        <div
+          class="flex flex-row m-4 justify-between items-center border border-black box-border rounded-xl bg-gradient-to-r from-black via-neutral-800 to-stone-900"
+        >
+          <div class="flex flex-col">
+            <a (click)="viewCard(card.id)" class="ml-1 mt-1">{{ card.userName }}</a>
+            <p class="ml-1 text-xs">
+              {{ cardUtils.getCensoredNumber(card) }}
+            </p>
+            <p class="ml-1 mt-2">{{ card.color }} | {{ card.cardFlag }}</p>
+          </div>
+          <img class="mr-2 size-16" src="{{ cardUtils.getCardIcon(card) }}" />
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

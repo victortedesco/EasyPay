@@ -19,8 +19,16 @@ public class TransactionEntityConfiguration : IEntityTypeConfiguration<Transacti
         builder.Property(e => e.SenderId)
             .IsRequired();
 
+        builder.Property(e => e.SenderName)
+            .IsRequired()
+            .HasMaxLength(64);
+
         builder.Property(e => e.RecipientId)
             .IsRequired();
+
+        builder.Property(e => e.RecipientName)
+            .IsRequired()
+            .HasMaxLength(64);
 
         builder.Property(u => u.Amount)
             .HasDefaultValue(0m)

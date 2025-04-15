@@ -1,7 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using EasyPay.Library.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using EasyPay.Library.Services;
+using Microsoft.OpenApi.Models;
 
 namespace Transactions.API.Application.Extensions;
 
@@ -9,13 +9,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers().ConfigureApiBehaviorOptions(options =>
-        {
-            options.SuppressMapClientErrors = true;
-        }); ;
+        services.AddHealthChecks();
         services.AddEndpointsApiExplorer();
         services.AddHttpContextAccessor();
-        services.AddScoped<IKeyCloakService, KeyCloakService>();
+        services.AddSingleton<IKeyCloakService, KeyCloakService>();
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
@@ -72,6 +69,10 @@ public static class DependencyInjection
                 }
             };
             o.AddSecurityRequirement(securityRequirement);
+        });
+        services.AddControllers().ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressMapClientErrors = true;
         });
 
         return services;

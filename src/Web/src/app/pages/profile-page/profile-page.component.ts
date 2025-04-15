@@ -8,11 +8,18 @@ import { CommonModule } from "@angular/common";
 import { Card } from "../../models/card.model";
 import { Transaction } from "../../models/transaction.model";
 import { CardUtils } from "../../shared/cardutils";
+import { TransactionService } from "../../services/transaction/transaction.service";
+import { AuthService } from "../../services/authentication/authentication.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { HeaderComponent } from "../../shared/header/header.component";
+import { NavbarComponent } from "../../shared/navbar/navbar.component";
+import { CardService } from "../../services/card/card.service";
+import { AddUserRequest } from "../../models/request/add.user.request";
 
 @Component({
   selector: "app-profile-page",
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, HeaderComponent, NavbarComponent],
   templateUrl: "./profile-page.component.html",
   styleUrls: [],
 })
@@ -20,55 +27,32 @@ export class ProfilePageComponent implements OnInit {
   dateUtils: DateUtils = new DateUtils();
   cardUtils: CardUtils = new CardUtils();
 
-  private userId: number = 0;
+  private userId?: string;
 
-  public user?: User = {
-    id: 1234,
-    document: "123.456.789-10",
-    name: "Victor Augusto Tedesco",
-    email: "victor.a.tedesco@gmail.com",
-    balance: 150001.33,
-  };
+  public user?: User;
 
-  public cards: Card[] = [
-    {
-      id: 123,
-      number: 5412123412341234,
-      holderId: 1234,
-      holderName: "VICTOR A TEDESCO",
-      securityCode: 123,
-      expirationDate: new Date(),
-      limitValue: 100_000,
-      expenseValue: 1_000,
-      color: "Black",
-      type: "Crédito/Débito",
-    },
-  ];
+  public balance: number = 0;
 
-  public recentTransactions: Transaction[] = [
-    {
-      id: "1234565",
-      senderId: 123456,
-      senderName: "Victor Tedesco",
-      receiverId: 123456,
-      receiverName: "Vinicius Borges",
-      value: 233.49,
-      date: new Date(),
-    },
-  ];
+  public cards: Card[] = [];
+
+  public recentTransactions: Transaction[] = [];
 
   public isBalanceVisible: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private authService: AuthService,
+    private cardService: CardService,
+    private transactionService: TransactionService,
     private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.userId = parseInt(params.get("id") || "0");
-      //this.loadUser();
+      this.loadUser();
+      if (!this.userId) return;
+      this.loadBalance();
       this.loadCards();
       this.loadRecentTransactions();
       this.isBalanceVisible = localStorage.getItem("showBalance") === "true";
@@ -76,21 +60,55 @@ export class ProfilePageComponent implements OnInit {
   }
 
   loadUser(): void {
-    if (this.userId == 0) this.router.navigate([""]);
+    this.user = this.authService.convertTokenToUser();
+    this.userId = this.user?.id;
+  }
 
-    this.userService.getById(this.userId).subscribe({
-      next: (response) => {
-        this.user = response;
+  loadBalance(): void {
+    if (!this.userId) return;
+
+    this.userService.getBalance(this.userId).subscribe({
+      next: (balance) => {
+        this.balance = balance;
       },
-      error: () => {
-        this.router.navigate([""]);
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          const addUser: AddUserRequest = {
+            name: this.user!.fullname,
+            email: this.user!.email,
+            document: this.user!.document,
+          };
+
+          this.userService.addUser(addUser).subscribe({
+            error: () => {
+              this.router.navigate(["/login"]);
+            },
+          });
+        }
       },
     });
   }
 
-  loadCards(): void {}
+  loadCards(): void {
+    if (!this.userId) return;
 
-  loadRecentTransactions(): void {}
+    this.cardService.getByUserId(this.userId).subscribe({
+      next: (cards) => {
+        this.cards = cards;
+      },
+    });
+  }
+
+  loadRecentTransactions(): void {
+    if (!this.userId) return;
+
+    this.transactionService.getTransactionsByUserId(this.userId).subscribe({
+      next: (response) => {
+        if (!response) return;
+        this.recentTransactions = response.splice(0, 5);
+      },
+    });
+  }
 
   toggleBalanceVisibility(): void {
     this.isBalanceVisible = !this.isBalanceVisible;
@@ -98,6 +116,10 @@ export class ProfilePageComponent implements OnInit {
   }
 
   viewTransaction(transaction: Transaction): void {
-    this.router.navigate(["transaction", { id: transaction.id }]);
+    this.router.navigate(["receipt", { id: transaction.id }]);
+  }
+
+  viewCard(cardId: number): void {
+    this.router.navigate(["/card", { id: cardId }]);
   }
 }

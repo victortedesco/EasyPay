@@ -1,0 +1,144 @@
+<div class="flex">
+  <div class="hidden lg:flex h-screen sticky top-0 left-0">
+    <app-navbar [user]="user!"></app-navbar>
+  </div>
+
+  <div class="w-full">
+    <app-header pageName="Transferência"></app-header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 justify-evenly h-screen">
+      <div class="flex flex-col justify-around lg:justify-start">
+        <!-- <div class="mt-5 mb-4 w-full">
+          <label
+            for="recipient"
+            class="font-bold lg:ml-10 md:ml-10 ml-8 mt-10 block text-gray-700"
+            >Enviar para</label
+          >
+          <mat-form-field
+            appearance="outline"
+            class="w-96 lg:ml-10 md:ml-10 ml-8"
+          >
+            <mat-select [(ngModel)]="selectedRecipient" id="recipient">
+              <mat-option
+                *ngFor="let recipient of recentRecipients"
+                [value]="recipient"
+              >
+                {{ recipient.fullname }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+
+        <!-- Card de Transferência -->
+        <div
+          class="flex flex-col w-96 justify-between items-start m-4 md:ml-10 lg:ml-10 ml-8 border-transparent box-border rounded-xl bg-custom-2 p-6"
+        >
+          <!-- Campo de valor da transferência -->
+          <div class="w-96 h-16">
+            <mat-form-field
+              appearance="outline"
+              class="w-80 h-2 text-sm border-none border-transparent"
+            >
+              <input
+                matInput
+                [(ngModel)]="transferAmount"
+                type="number"
+                id="amount"
+                class="h-2 rounded-md text-center border-none"
+              />
+              <span matTextPrefix>R$&nbsp;</span>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="transferType"
+            class="block text-gray-700 lg:ml-10 md:ml-10 ml-8"
+            >Tipo de Transferência</label
+          >
+          <mat-form-field
+            appearance="outline"
+            class="w-96 lg:ml-10 md:ml-10 ml-8"
+          >
+            <mat-select [(ngModel)]="transferType" id="transferType">
+              <!-- <mat-option value="bank">Por Dados Bancários</mat-option> -->
+              <mat-option value="pix">Via PIX</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="transferType === 'bank'">
+          <label
+            for="bankNumber"
+            class="block text-gray-700 lg:ml-10 md:ml-10 ml-8"
+            >Número do Banco</label
+          >
+          <input
+            matInput
+            [(ngModel)]="bankNumber"
+            id="bankNumber"
+            type="text"
+            placeholder="Digite o número do Banco"
+            class="w-96 mb-4 px-3 py-2 border rounded-md lg:ml-10 md:ml-10 ml-8"
+          />
+
+          <label
+            for="cpfCnpj"
+            class="block text-gray-700 lg:ml-10 md:ml-10 ml-8"
+            >CPF ou CNPJ</label
+          >
+          <input
+            matInput
+            [(ngModel)]="document"
+            id="document"
+            type="text"
+            placeholder="XXX.XXX.XXX-XX|XX.XXX.XXX/XXXX-XX"
+            class="w-96 mb-4 px-3 py-2 border rounded-md lg:ml-10 md:ml-10 ml-8"
+          />
+        </div>
+
+        <div *ngIf="transferType === 'pix'">
+          <label for="pixKey" class="block text-gray-700 lg:ml-10 md:ml-10 ml-8"
+            >Chave PIX</label
+          >
+          <input
+            matInput
+            [(ngModel)]="pixKey"
+            id="pixKey"
+            type="text"
+            placeholder="Digite a chave Pix"
+            class="w-96 lg:ml-10 md:ml-10 ml-8 mb-4 px-3 py-2 border rounded-md"
+          />
+        </div>
+
+        <div>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="confirmTransfer()"
+            class="lg:w-96 md:w-96 w-96 bg-custom-1 ml-8 md:ml-10 lg:ml-10 text-black py-2 rounded-md hover:bg-custom-3"
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+
+      <!-- Transferências Recentes -->
+      <div
+        class="flex flex-col lg:h-fit items-start m-4 mt-14 border border-transparent box-border rounded-xl"
+      >
+        <h3 class="font-extrabold lg:text-2xl ml-2">Transferências recentes</h3>
+        <ul class="space-y-2 w-full">
+          <li
+            *ngFor="let transfer of recentTransactions"
+            class="flex justify-between items-center bg-white p-3 rounded-md shadow-sm"
+          >
+            <span class="text-gray-700">{{ transfer.recipientName }}</span>
+            <span class="text-gray-500">R$ {{ transfer.amount }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
